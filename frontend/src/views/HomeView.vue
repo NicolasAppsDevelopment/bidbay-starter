@@ -1,14 +1,63 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, Ref } from "vue";
+import { API_URL } from "../config/config";
 
 const loading = ref(false);
 const error = ref(false);
+const products: Ref<{
+    id: string;
+    name: string;
+    description: string;
+    category: string;
+    originalPrice: number;
+    lastPrice: number | null;
+    pictureUrl: string;
+    endDate: string;
+    seller: {
+        id: string;
+        username: string;
+    };
+    bids: {
+        id: string;
+        price: number;
+        date: string;
+    }[];
+}[]> = ref([]);
+const filterInput = ref("");
+const sortInput = ref("name");
+
+const productsToDisplay = computed(() => {
+  let filteredArray = products.value.filter(
+    n => n.name.includes(filterInput.value)
+  );
+  switch (sortInput.value) {
+    case "name":
+    return filteredArray.sort((a, b) => a.name.localeCompare(b.name));
+      break;
+
+    case "price":
+      return filteredArray.sort((a, b) => a.originalPrice - b.originalPrice);
+      break;
+  
+    default:
+      break;
+  }
+});
+
+const setNameFilter = () => {
+  sortInput.value = "name"
+};
+const setPriceFilter = () => {
+  sortInput.value = "price"
+};
 
 async function fetchProducts() {
   loading.value = true;
   error.value = false;
 
   try {
+    const res = await fetch(API_URL + 'api/products');
+    products.value = await res.json();
   } catch (e) {
     error.value = true;
   } finally {
@@ -29,6 +78,7 @@ fetchProducts();
           <div class="input-group">
             <span class="input-group-text">Filtrage</span>
             <input
+              v-model="filterInput"
               type="text"
               class="form-control"
               placeholder="Filtrer par nom"
@@ -50,10 +100,10 @@ fetchProducts();
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
             <li>
-              <a class="dropdown-item" href="#"> Nom </a>
+              <a class="dropdown-item" href="#" @click="setNameFilter"> Nom </a>
             </li>
             <li>
-              <a class="dropdown-item" href="#" data-test-sorter-price>
+              <a class="dropdown-item" href="#" @click="setPriceFilter" data-test-sorter-price>
                 Prix
               </a>
             </li>
@@ -62,21 +112,21 @@ fetchProducts();
       </div>
     </div>
 
-    <div class="text-center mt-4" data-test-loading>
+    <div v-if="loading === true" class="text-center mt-4" data-test-loading>
       <div class="spinner-border" role="status">
         <span class="visually-hidden">Chargement...</span>
       </div>
     </div>
 
-    <div class="alert alert-danger mt-4" role="alert" data-test-error>
+    <div v-if="error === true" class="alert alert-danger mt-4" role="alert" data-test-error>
       Une erreur est survenue lors du chargement des produits.
     </div>
     <div class="row">
-      <div class="col-md-4 mb-4" v-for="i in 10" data-test-product :key="i">
+      <div class="col-md-4 mb-4" v-for="product in productsToDisplay" data-test-product :key="product.id">
         <div class="card">
-          <RouterLink :to="{ name: 'Product', params: { productId: 'TODO' } }">
+          <RouterLink :to="{ name: 'Product', params: { productId: product.id } }">
             <img
-              src="https://picsum.photos/id/403/512/512"
+              :src="product.pictureUrl"
               data-test-product-picture
               class="card-img-top"
             />
@@ -85,27 +135,27 @@ fetchProducts();
             <h5 class="card-title">
               <RouterLink
                 data-test-product-name
-                :to="{ name: 'Product', params: { productId: 'TODO' } }"
+                :to="{ name: 'Product', params: { productId: product.id } }"
               >
-                Machine à écrire
+               {{ product.name }} 
               </RouterLink>
             </h5>
             <p class="card-text" data-test-product-description>
-              Machine à écrire vintage en parfait état de fonctionnement
+             {{ product.description }} 
             </p>
             <p class="card-text">
               Vendeur :
               <RouterLink
                 data-test-product-seller
-                :to="{ name: 'User', params: { userId: 'TODO' } }"
+                :to="{ name: 'User', params: { userId: product.seller.id } }"
               >
-                alice
+               {{ product.seller.username }} 
               </RouterLink>
             </p>
             <p class="card-text" data-test-product-date>
-              En cours jusqu'au 05/04/2026
+              En cours jusqu'au {{ product.endDate }}
             </p>
-            <p class="card-text" data-test-product-price>Prix actuel : 42 €</p>
+            <p class="card-text" data-test-product-price>{{ product.lastPrice != null ? "Prix actuel : " + product.lastPrice : "Prix de départ : " + product.originalPrice }}  €</p>
           </div>
         </div>
       </div>
