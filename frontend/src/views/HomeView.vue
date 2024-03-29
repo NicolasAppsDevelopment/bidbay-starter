@@ -4,6 +4,7 @@ import { API_URL } from "../config/config";
 
 const loading = ref(false);
 const error = ref(false);
+const errorStr = ref("");
 const products: Ref<{
     id: string;
     name: string;
@@ -59,6 +60,10 @@ async function fetchProducts() {
     const res = await fetch(API_URL + 'api/products');
     products.value = await res.json();
   } catch (e) {
+    errorStr.value = "Une erreur est survenue lors du chargement des produits."
+    if (e instanceof Error){
+      errorStr.value += " " + e.message;
+    } 
     error.value = true;
   } finally {
     loading.value = false;
@@ -119,7 +124,7 @@ fetchProducts();
     </div>
 
     <div v-if="error === true" class="alert alert-danger mt-4" role="alert" data-test-error>
-      Une erreur est survenue lors du chargement des produits.
+      {{ errorStr }} 
     </div>
     <div class="row">
       <div class="col-md-4 mb-4" v-for="product in productsToDisplay" data-test-product :key="product.id">
