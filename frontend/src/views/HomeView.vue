@@ -5,25 +5,26 @@ import { API_URL } from "../config/config";
 const loading = ref(false);
 const error = ref(false);
 const errorStr = ref("");
-const products: Ref<{
+type Products ={
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  originalPrice: number;
+  lastPrice: number | null;
+  pictureUrl: string;
+  endDate: string;
+  seller: {
     id: string;
-    name: string;
-    description: string;
-    category: string;
-    originalPrice: number;
-    lastPrice: number | null;
-    pictureUrl: string;
-    endDate: string;
-    seller: {
-        id: string;
-        username: string;
-    };
-    bids: {
-        id: string;
-        price: number;
-        date: string;
-    }[];
-}[]> = ref([]);
+    username: string;
+  };
+  bids: {
+    id: string;
+    price: number;
+    date: string;
+  }[];
+}[];
+const products: Ref<Products> = ref([]);
 const filterInput = ref("");
 const sortInput = ref("name");
 
@@ -158,7 +159,7 @@ fetchProducts();
               </RouterLink>
             </p>
             <p class="card-text" data-test-product-date>
-              En cours jusqu'au {{ product.endDate }}
+              {{ new Date(product.endDate) < new Date() ? "Terminé" : "En cours jusqu'au " + product.endDate }}
             </p>
             <p class="card-text" data-test-product-price>{{ product.lastPrice != null ? "Prix actuel : " + product.lastPrice : "Prix de départ : " + product.originalPrice }}  €</p>
           </div>
