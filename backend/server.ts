@@ -1,5 +1,5 @@
 import express from 'express'
-import { initializeDatabase } from './orm/index.js'
+import { User, Product, Bid , initializeDatabase } from './orm/index.js'
 import { regenerateFixtures } from './orm/fixtures/index.js'
 import devRoutes from './routes/dev.js'
 import authRoutes from './routes/auth.js'
@@ -22,8 +22,13 @@ async function main () {
   app.use(userRoutes)
   app.use(bidRoutes)
 
+  let users= await User.findAll({where: { admin: false}});
+  console.log(users);
+  await User.create({ username: "Lena",email:"mailaupi@getMaxListeners.com",password:"e-èjuy,yyyyyyyyyyyyyyyyyyyy", admin: false });
+  console.log(users);
+
   app.listen(process.env.PORT || 3000, () => {
-    console.log('Server started on port 3000')
+    console.log('(from server.ts) Server started on port 3000')
   })
 }
 

@@ -14,11 +14,12 @@
     "types": ["node"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "orm/*": ["./orm/*"]
     },
     "outDir": "./dist",
     "allowJs": true,
     "checkJs": false
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "**/*.ts"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "orm/**/*.ts", "**/*.ts"],
 }
