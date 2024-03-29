@@ -21,7 +21,8 @@ import { User, Product, Bid } from '../orm/index.js'
 const router = express.Router()
 
 router.get('/api/users/:userId', async (req, res) => {
-  res.status(600).send()
+  const users = await User.findAll();
+  res.status(200).send(users)
 })
 
 export default router
