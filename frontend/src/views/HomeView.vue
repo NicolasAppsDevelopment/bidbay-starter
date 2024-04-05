@@ -27,10 +27,11 @@ type Products ={
 const products: Ref<Products> = ref([]);
 const filterInput = ref("");
 const sortInput = ref("name");
+const sortStr = ref("Trier par nom");
 
 const productsToDisplay = computed(() => {
   let filteredArray = products.value.filter(
-    n => n.name.includes(filterInput.value)
+    n => n.name.toLocaleLowerCase().includes(filterInput.value.toLocaleLowerCase())
   );
   switch (sortInput.value) {
     case "name":
@@ -45,10 +46,12 @@ const productsToDisplay = computed(() => {
 });
 
 const setNameFilter = () => {
-  sortInput.value = "name"
+  sortInput.value = "name";
+  sortStr.value = "Trier par nom";
 };
 const setPriceFilter = () => {
-  sortInput.value = "price"
+  sortInput.value = "price";
+  sortStr.value = "Trier par prix";
 };
 
 async function fetchProducts() {
@@ -100,7 +103,7 @@ fetchProducts();
             aria-expanded="false"
             data-test-sorter
           >
-            Trier par nom
+           {{ sortStr }} 
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
             <li>
