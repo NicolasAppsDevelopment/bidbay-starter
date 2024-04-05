@@ -11,7 +11,7 @@ type Products ={
   description: string;
   category: string;
   originalPrice: number;
-  lastPrice: number | null;
+  lastPrice: number;
   pictureUrl: string;
   endDate: string;
   seller: {
@@ -35,12 +35,10 @@ const productsToDisplay = computed(() => {
   switch (sortInput.value) {
     case "name":
     return filteredArray.sort((a, b) => a.name.localeCompare(b.name));
-      break;
-
+    
     case "price":
-      return filteredArray.sort((a, b) => a.originalPrice - b.originalPrice);
-      break;
-  
+      return filteredArray.sort((a, b) => a.lastPrice - b.lastPrice);
+
     default:
       break;
   }
@@ -159,9 +157,9 @@ fetchProducts();
               </RouterLink>
             </p>
             <p class="card-text" data-test-product-date>
-              {{ new Date(product.endDate) < new Date() ? "Terminé" : "En cours jusqu'au " + product.endDate }}
+              {{ new Date(product.endDate) < new Date() ? "Terminé" : "En cours jusqu'au " + new Date(product.endDate).toLocaleDateString(undefined, {year: 'numeric', month: '2-digit', day: '2-digit'}) }}
             </p>
-            <p class="card-text" data-test-product-price>{{ product.lastPrice != null ? "Prix actuel : " + product.lastPrice : "Prix de départ : " + product.originalPrice }}  €</p>
+            <p class="card-text" data-test-product-price>{{ product.bids.length > 0 ? "Prix actuel : " + product.lastPrice : "Prix de départ : " + product.lastPrice }}  €</p>
           </div>
         </div>
       </div>

@@ -7,21 +7,41 @@ import { Sequelize } from 'sequelize'
 const router = express.Router()
 
 router.get('/api/products', async (req, res, next) => {
-  const products = await Product.findAll(
-    {attributes: [
+  const products = await Product.findAll({
+    attributes: [
       'id',
       'name',
       'description',
       'category',
       'originalPrice',
-      [Sequelize.literal(`(SELECT price FROM Bids WHERE productId = Product.id AND date in (SELECT MAX(date) FROM 'Bids'))`), 'lastPrice'],
       'pictureUrl',
       'endDate',
+    ],
+    include: [
+      {
+        model: User,
+        as: 'seller',
+        attributes: ['id', 'username'],
+      },
+      {
+        model: Bid,
+        as: 'bids',
+        attributes: ['id', 'price', 'date'],
+      },
+    ],
+  });
 
-      [Sequelize.literal(`(SELECT id,username FROM Users WHERE id = Product.sellerId)`), 'seller'],
-      [Sequelize.literal(`(SELECT id,price,date FROM Bids WHERE productId = Product.id)`), 'bids']]
+  // Sort bids by price and set lastPrice for each product
+  products.forEach(product => {
+    product.bids.sort((a, b) => b.date.getTime() - a.date.getTime());
+    if (product.bids.length == 0) { 
+      product.setDataValue("lastPrice", product.originalPrice);
+    } else {
+      product.setDataValue("lastPrice", product.bids[0].price);
     }
-  );
+  });
+
+  
   res.status(200).send(products)
 })
 
