@@ -14,18 +14,53 @@ router.get('/api/products', async (req, res, next) => {
       'description',
       'category',
       'originalPrice',
-      [Sequelize.literal(`(SELECT price FROM Bid WHERE productId = Product.id AND date=max(date))`), 'lastPrice'],
+      [Sequelize.literal(`(SELECT price FROM Bids WHERE productId = Product.id AND date in (SELECT MAX(date) FROM 'Bids'))`), 'lastPrice'],
       'pictureUrl',
       'endDate',
-      [Sequelize.literal(`(SELECT id,username FROM User WHERE id = Product.sellerId`), 'seller'],
-      [Sequelize.literal(`(SELECT id,price,date FROM Bid WHERE productId = Product.id `), 'bids']]
+
+      [Sequelize.literal(`(SELECT id,username FROM Users WHERE id = Product.sellerId)`), 'seller'],
+      [Sequelize.literal(`(SELECT id,price,date FROM Bids WHERE productId = Product.id)`), 'bids']]
     }
   );
   res.status(200).send(products)
 })
 
 router.get('/api/products/:productId', async (req, res) => {
-  res.status(600).send()
+  const products = await Product.findAll({
+    where:{ 
+      'id' : req.params.productId
+    }, 
+    attributes: [
+      'id',
+      'name',
+      'description',
+      'category',
+      'originalPrice',
+      'pictureUrl',
+      'endDate',
+    ],
+    include: [
+      {
+        model:User,
+        as: 'seller',
+        attributes:['id','username'] 
+      },
+      {
+        model:Bid,
+        as: 'bids',
+        attributes:['id','price','date',include: [
+          {
+            model:User,
+            as: 'bidder',
+            attributes:['id','username'] 
+          }
+        ] ] 
+      }
+
+    ]
+    
+});
+  res.status(200).send(products)
 })
 
 // You can use the authMiddleware with req.user.id to authenticate your endpoint ;)
