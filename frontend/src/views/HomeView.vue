@@ -35,12 +35,10 @@ const productsToDisplay = computed(() => {
   switch (sortInput.value) {
     case "name":
     return filteredArray.sort((a, b) => a.name.localeCompare(b.name));
-      break;
-
+    
     case "price":
       return filteredArray.sort((a, b) => a.originalPrice - b.originalPrice);
-      break;
-  
+
     default:
       break;
   }
