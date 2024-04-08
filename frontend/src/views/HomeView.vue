@@ -27,10 +27,11 @@ type Products ={
 const products: Ref<Products> = ref([]);
 const filterInput = ref("");
 const sortInput = ref("name");
+const sortStr = ref("Trier par nom");
 
 const productsToDisplay = computed(() => {
   let filteredArray = products.value.filter(
-    n => n.name.includes(filterInput.value)
+    n => n.name.toLocaleLowerCase().includes(filterInput.value.toLocaleLowerCase())
   );
   switch (sortInput.value) {
     case "name":
@@ -45,10 +46,12 @@ const productsToDisplay = computed(() => {
 });
 
 const setNameFilter = () => {
-  sortInput.value = "name"
+  sortInput.value = "name";
+  sortStr.value = "Trier par nom";
 };
 const setPriceFilter = () => {
-  sortInput.value = "price"
+  sortInput.value = "price";
+  sortStr.value = "Trier par prix";
 };
 
 async function fetchProducts() {
@@ -57,7 +60,11 @@ async function fetchProducts() {
 
   try {
     const res = await fetch(API_URL + 'api/products');
-    products.value = await res.json();
+    const jsonRes = await res.json();
+    if (res.status != 200 || (jsonRes['status'] != undefined && jsonRes['status'] != 200)) {
+      throw new Error("Le serveur à retourner une erreur.");
+    }
+    products.value = jsonRes;
   } catch (e) {
     errorStr.value = "Une erreur est survenue lors du chargement des produits."
     if (e instanceof Error){
@@ -100,7 +107,7 @@ fetchProducts();
             aria-expanded="false"
             data-test-sorter
           >
-            Trier par nom
+           {{ sortStr }} 
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
             <li>
