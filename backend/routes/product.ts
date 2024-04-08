@@ -1,8 +1,7 @@
-import express from 'express'
+import express, { Request } from 'express'
 import { Product, Bid, User } from '../orm/index.js'
 import authMiddleware from '../middlewares/auth.js'
-import { getDetails } from '../validators/index.js'
-import { Sequelize } from 'sequelize'
+import { Token } from '../types/types'
 
 const router = express.Router()
 
@@ -89,23 +88,38 @@ router.get('/api/products/:productId', async (req, res) => {
 
 // You can use the authMiddleware with req.user.id to authenticate your endpoint ;)
 
-router.post('/api/products', (req, res) => {
+router.post('/api/products', authMiddleware, async (req: Request & {user?: Token}, res) => {
+  if (req.user == undefined){
+    res.status(500);
+    return;
+  }
   
-  //if not register as an user
-  //req.user.id
-  //res.status(401).send("not authorized");
+  const user = await User.findByPk(req.user.id);
+  if (!user) {
+    res.status(404).send("User not found");
+    return;
+  }
 
-  //if (req.params.name==null || ... )
-  
-  const products = Product.create({
-      name:req.body.name,
-      description:req.body.description,
-      category:req.body.category,
-      originalPrice:req.body.originalPrice,
-      pictureUrl:req.body.pictureUrl,
-      endDate:req.body.endDate,
-  })
+  if (req.body.name == undefined || req.body.name == null ||
+    req.body.name == undefined || req.body.name == null ||
+    req.body.description == undefined || req.body.description == null ||
+    req.body.category == undefined || req.body.category == null ||
+    req.body.originalPrice == undefined || req.body.originalPrice == null ||
+    req.body.pictureUrl == undefined || req.body.pictureUrl == null ||
+    req.body.endDate == undefined || req.body.endDate == null) {
+      res.status(400).send("Empty fields!");
+      return;
+  } 
 
+  const product = new Product();
+  product.sellerId = req.user.id;
+  product.name = req.body.name,
+  product.description = req.body.description,
+  product.category = req.body.category,
+  product.originalPrice = req.body.originalPrice,
+  product.pictureUrl = req.body.pictureUrl,
+  product.endDate = req.body.endDate,
+  await product.save();
 
   res.status(201).send("created");
 })

@@ -2,4 +2,4 @@
 export const authors = ["Nicolas COLOMB (p2201232)", "Tom PELLECCHIA (p2204947)"];
 
 // Groupe
-export const group = 1.2;
+export const group = 1;
