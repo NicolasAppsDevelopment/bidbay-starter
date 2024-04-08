@@ -60,7 +60,11 @@ async function fetchProducts() {
 
   try {
     const res = await fetch(API_URL + 'api/products');
-    products.value = await res.json();
+    const jsonRes = await res.json();
+    if (res.status != 200 || (jsonRes['status'] != undefined && jsonRes['status'] != 200)) {
+      throw new Error("Le serveur à retourner une erreur.");
+    }
+    products.value = jsonRes;
   } catch (e) {
     errorStr.value = "Une erreur est survenue lors du chargement des produits."
     if (e instanceof Error){
