@@ -45,7 +45,7 @@ router.get('/api/products', async (req, res, next) => {
 })
 
 router.get('/api/products/:productId', async (req, res) => {
-  const products = await Product.findAll({
+  const products = await Product.findOne({
     where:{ 
       'id' : req.params.productId
     }, 
@@ -80,9 +80,10 @@ router.get('/api/products/:productId', async (req, res) => {
   });
 
   if (products==null){
-    res.status(404).json({ error: 'not found'});
-  } 
-
+    res.status(404).json({ "error": "Product not found" });
+    return;
+  }
+  
   res.status(200).send(products);
 })
 
@@ -90,46 +91,214 @@ router.get('/api/products/:productId', async (req, res) => {
 
 router.post('/api/products', authMiddleware, async (req: Request & {user?: Token}, res) => {
   if (req.user == undefined){
-    res.status(500);
+    res.status(500).send();
     return;
   }
   
   const user = await User.findByPk(req.user.id);
   if (!user) {
+    res.status(404).send({ "error" : "User not found" });
+    return;
+  }
+
+  if (req.body.name == undefined || req.body.name == null) {
+    res.status(400).send(
+      {
+        "error": "Invalid or missing fields",
+        "details": ["name", "name"]
+      }
+    );
+    return;
+  }
+
+  if (req.body.description == undefined || req.body.description == null) {
+      res.status(400).send(
+        {
+		      "error": "Invalid or missing fields",
+          "details": ["name", "description"]
+		    }
+      );
+      return;
+  }
+
+  if (req.body.category == undefined || req.body.category == null) {
+      res.status(400).send(
+        {
+		      "error": "Invalid or missing fields",
+          "details": ["name", "category"]
+		    }
+      );
+      return;
+  }
+
+  if (req.body.originalPrice == undefined || req.body.originalPrice == null) {
+      res.status(400).send(
+        {
+		      "error": "Invalid or missing fields",
+          "details": ["name", "originalPrice"]
+		    }
+      );
+      return;
+  }
+
+  if (req.body.pictureUrl == undefined || req.body.pictureUrl == null) {
+      res.status(400).send(
+        {
+		      "error": "Invalid or missing fields",
+          "details": ["name", "pictureUrl"]
+		    }
+      );
+      return;
+  }
+
+  if (req.body.endDate == undefined || req.body.endDate == null) {
+      res.status(400).send(
+        {
+		      "error": "Invalid or missing fields",
+          "details": ["name", "endDate"]
+		    }
+      );
+      return;
+  }
+
+  const product = new Product();
+  product.sellerId = req.user.id;
+  product.name = req.body.name;
+  product.description = req.body.description;
+  product.category = req.body.category;
+  product.originalPrice = req.body.originalPrice;
+  product.pictureUrl = req.body.pictureUrl;
+  product.endDate = req.body.endDate;
+  await product.save();
+
+  res.status(201).send(product);
+})
+
+router.put('/api/products/:productId', authMiddleware, async (req: Request & {user?: Token}, res) => {
+  if (req.user == undefined){
+    res.status(500).send();
+    return;
+  }
+  
+  if (req.params.productId == undefined){
+    res.status(400).send({
+      "error": "Invalid or missing fields",
+      "details": ["name", "productId"]
+    });
+    return;
+  }
+  
+  const product = await Product.findByPk(req.params.productId);
+  if (!product) {
+    res.status(404).send({ "error" : "Product not found" });
+    return;
+  }
+
+  if (req.user?.id != product.sellerId && req.user?.admin == false) {
+    res.status(403).send({ "error" : "Unauthorized" });
+    return;
+  }
+
+  if (req.body.name == undefined || req.body.name == null) {
+      res.status(400).send(
+        {
+		      "error": "Invalid or missing fields",
+          "details": ["name", "name"]
+		    }
+      );
+      return;
+  }
+
+  if (req.body.description == undefined || req.body.description == null) {
+      res.status(400).send(
+        {
+		      "error": "Invalid or missing fields",
+          "details": ["name", "description"]
+		    }
+      );
+      return;
+  }
+
+  if (req.body.category == undefined || req.body.category == null) {
+      res.status(400).send(
+        {
+		      "error": "Invalid or missing fields",
+          "details": ["name", "category"]
+		    }
+      );
+      return;
+  }
+
+  if (req.body.originalPrice == undefined || req.body.originalPrice == null) {
+      res.status(400).send(
+        {
+		      "error": "Invalid or missing fields",
+          "details": ["name", "originalPrice"]
+		    }
+      );
+      return;
+  }
+
+  if (req.body.pictureUrl == undefined || req.body.pictureUrl == null) {
+      res.status(400).send(
+        {
+		      "error": "Invalid or missing fields",
+          "details": ["name", "pictureUrl"]
+		    }
+      );
+      return;
+  }
+
+  if (req.body.endDate == undefined || req.body.endDate == null) {
+      res.status(400).send(
+        {
+		      "error": "Invalid or missing fields",
+          "details": ["name", "endDate"]
+		    }
+      );
+      return;
+  }
+
+  product.name = req.body.name;
+  product.description = req.body.description;
+  product.category = req.body.category;
+  product.originalPrice = req.body.originalPrice;
+  product.pictureUrl = req.body.pictureUrl;
+  product.endDate = req.body.endDate;
+  await product.save();
+
+  res.status(200).send(product);
+})
+
+router.delete('/api/products/:productId', authMiddleware, async (req: Request & {user?: Token}, res) => {
+  if (req.user == undefined){
+    res.status(500).send();
+    return;
+  }
+
+  if (req.params.productId == undefined){
+    res.status(400).send({
+      "error": "Invalid or missing fields",
+      "details": ["name", "productId"]
+    });
+    return;
+  }
+  
+  const product = await Product.findByPk(req.params.productId);
+  if (!product) {
     res.status(404).send("User not found");
     return;
   }
 
-  if (req.body.name == undefined || req.body.name == null ||
-    req.body.name == undefined || req.body.name == null ||
-    req.body.description == undefined || req.body.description == null ||
-    req.body.category == undefined || req.body.category == null ||
-    req.body.originalPrice == undefined || req.body.originalPrice == null ||
-    req.body.pictureUrl == undefined || req.body.pictureUrl == null ||
-    req.body.endDate == undefined || req.body.endDate == null) {
-      res.status(400).send("Empty fields!");
-      return;
-  } 
+  if (req.user?.id != product.sellerId && req.user?.admin == false) {
+    res.status(403).send({ "error" : "Unauthorized" });
+    return;
+  }
 
-  const product = new Product();
-  product.sellerId = req.user.id;
-  product.name = req.body.name,
-  product.description = req.body.description,
-  product.category = req.body.category,
-  product.originalPrice = req.body.originalPrice,
-  product.pictureUrl = req.body.pictureUrl,
-  product.endDate = req.body.endDate,
-  await product.save();
+  await Bid.destroy({ where: { productId: product.id }});
+  await Product.destroy({ where: { id: product.id }});
 
-  res.status(201).send("created");
-})
-
-router.put('/api/products/:productId', async (req, res) => {
-  res.status(600).send();
-})
-
-router.delete('/api/products/:productId', async (req, res) => {
-  res.status(600).send();
+  res.status(204).send();
 })
 
 export default router

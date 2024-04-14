@@ -1,28 +1,41 @@
-/*import express from 'express'
-import { User } from '../orm/index.js';
-
-const router = express.Router()
-
-router.get('/api/users/:userId', async (req, res) => {
-  const userId = req.params.userId;
-  try {
-    const users = await User.findAll();
-    res.json(users);
-  } catch (error) {
-      res.status(500).send();
-  }
-});
-
-export default router*/
-
 import express from 'express'
-import { User, Product, Bid } from '../orm/index.js'
+import { Bid, Product, User } from '../orm/index.js';
 
 const router = express.Router()
 
 router.get('/api/users/:userId', async (req, res) => {
-  const users = await User.findAll();
-  res.status(200).send(users)
+  if (req.params.userId == undefined){
+    res.status(400).send({
+      "error": "Invalid or missing fields",
+      "details": ["name", "userId"]
+    });
+    return;
+  }
+
+  const user = await User.findByPk(req.params.userId, { 
+    include: [
+    {
+      model: Product,
+      as: 'products',
+      attributes: ['id', 'name', 'description', 'category', 'originalPrice', 'pictureUrl', 'endDate'],
+    },
+    {
+      model: Bid,
+      as: 'bids',
+      attributes: ['id', 'price', 'date'],
+      include: [{
+        model: Product,
+        as: 'product',
+        attributes: ['id', 'name'],
+      }],
+    },
+  ]});
+  if (!user) {
+    res.status(404).send("User not found");
+    return;
+  }
+  console.log(user.toJSON());
+  res.status(200).send(user);
 })
 
 export default router

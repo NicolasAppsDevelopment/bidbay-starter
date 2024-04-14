@@ -5,9 +5,9 @@
     "passes": 2,
     "pending": 0,
     "failures": 7,
-    "start": "2024-04-08T10:41:30.244Z",
-    "end": "2024-04-08T10:42:06.068Z",
-    "duration": 35824,
+    "start": "2024-04-14T16:44:12.923Z",
+    "end": "2024-04-14T16:44:45.752Z",
+    "duration": 32829,
     "testsRegistered": 9,
     "passPercent": 22.22222222222222,
     "pendingPercent": 0,
@@ -18,16 +18,16 @@
   },
   "results": [
     {
-      "uuid": "79555f0a-a9b0-4d0b-9195-baaa8ab61760",
+      "uuid": "2c20098e-f33b-4353-b77f-052ee34d55a2",
       "title": "",
-      "fullFile": "cypress/e2e/frontend/user.cy.js",
-      "file": "cypress/e2e/frontend/user.cy.js",
+      "fullFile": "cypress\\e2e\\frontend\\user.cy.js",
+      "file": "cypress\\e2e\\frontend\\user.cy.js",
       "beforeHooks": [],
       "afterHooks": [],
       "tests": [],
       "suites": [
         {
-          "uuid": "b5a5c300-f0cc-4f17-a154-e0bcae88a6a6",
+          "uuid": "15fa93ba-8e4e-48c8-9880-31d7a3ba2e6f",
           "title": "Page /users/:userId",
           "fullFile": "",
           "file": "",
@@ -38,7 +38,7 @@
               "title": "display products",
               "fullTitle": "Page /users/:userId display products",
               "timedOut": null,
-              "duration": 276,
+              "duration": 121,
               "state": "passed",
               "speed": "fast",
               "pass": true,
@@ -47,8 +47,8 @@
               "context": null,
               "code": "// Note : Test le scénario de récupération et d'affichage des produits\n(0, _orm.createProduct)().then(({\n  product\n}) => {\n  cy.visit(`http://localhost:5173/users/${_tokens.aliceId}`);\n  cy.get(\"[data-test-product]\").should(\"have.length\", 8);\n  cy.get(\"[data-test-product]\").last().find(\"[data-test-product-name]\").should(\"have.text\", product.name).invoke(\"attr\", \"href\").should(\"contain\", product.id);\n  cy.get(\"[data-test-product]\").last().find(\"[data-test-product-description]\").should(\"have.text\", product.description);\n  cy.get(\"[data-test-product]\").last().find(\"[data-test-product-price]\").should(\"contain.text\", product.originalPrice + \" €\");\n  cy.get(\"[data-test-product]\").last().find(\"[data-test-product-picture]\").invoke(\"attr\", \"src\").should(\"eq\", product.pictureUrl);\n});",
               "err": {},
-              "uuid": "7da396ac-e1e2-4c34-9c2c-a553d6bb0d7e",
-              "parentUUID": "b5a5c300-f0cc-4f17-a154-e0bcae88a6a6",
+              "uuid": "ce287d19-10f5-4c5f-9c4b-54853ea7143b",
+              "parentUUID": "15fa93ba-8e4e-48c8-9880-31d7a3ba2e6f",
               "isHook": false,
               "skipped": false
             },
@@ -56,7 +56,7 @@
               "title": "display bids",
               "fullTitle": "Page /users/:userId display bids",
               "timedOut": null,
-              "duration": 198,
+              "duration": 88,
               "state": "passed",
               "speed": "fast",
               "pass": true,
@@ -65,8 +65,8 @@
               "context": null,
               "code": "// Note : Test le scénario de récupération et d'affichage des offres\n(0, _orm.createProduct)(\"futur\", _tokens.bobToken).then(({\n  product\n}) => {\n  (0, _orm.createBid)(product.id, product.originalPrice, _tokens.aliceToken).then(({\n    bid\n  }) => {\n    cy.visit(`http://localhost:5173/users/${_tokens.aliceId}`);\n    cy.get(\"[data-test-bid]\").should(\"exist\");\n    cy.get(`[data-test-bid-product][href$=\"${product.id}\"]`).should(\"exist\").first().closest(\"[data-test-bid]\").then(el => {\n      cy.wrap(el).find(\"[data-test-bid-product]\").should(\"have.text\", product.name);\n      cy.wrap(el).find(\"[data-test-bid-price]\").should(\"have.text\", bid.price + \" €\");\n      cy.wrap(el).find(\"[data-test-bid-date]\").should(\"contain.text\", new Date().getDate()).should(\"contain.text\", new Date().getMonth() + 1).should(\"contain.text\", new Date().getFullYear());\n    });\n  });\n});",
               "err": {},
-              "uuid": "aed26d93-a618-4531-97fc-c6c8ec38e9af",
-              "parentUUID": "b5a5c300-f0cc-4f17-a154-e0bcae88a6a6",
+              "uuid": "c6d54636-5df4-4587-8151-98c4bf2562cb",
+              "parentUUID": "15fa93ba-8e4e-48c8-9880-31d7a3ba2e6f",
               "isHook": false,
               "skipped": false
             },
@@ -74,7 +74,7 @@
               "title": "no admin badge",
               "fullTitle": "Page /users/:userId no admin badge",
               "timedOut": null,
-              "duration": 4971,
+              "duration": 5036,
               "state": "failed",
               "speed": null,
               "pass": false,
@@ -87,8 +87,8 @@
                 "estack": "AssertionError: Timed out retrying after 4000ms: Expected <span.badge.rounded-pill.bg-primary> not to exist in the DOM, but it was continuously found.\n    at Context.eval (webpack://frontend/./cypress/e2e/frontend/user.cy.js:88:32)\n    at runnable.fn (http://localhost:5173/__cypress/runner/cypress_runner.js:138654:19)\n    at callFn (http://localhost:5173/__cypress/runner/cypress_runner.js:157261:21)\n    at Runnable.run (http://localhost:5173/__cypress/runner/cypress_runner.js:157248:7)\n    at <unknown> (http://localhost:5173/__cypress/runner/cypress_runner.js:163172:30)\n    at PassThroughHandlerContext.finallyHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:4072:23)\n    at PassThroughHandlerContext.tryCatcher (http://localhost:5173/__cypress/runner/cypress_runner.js:1807:23)\n    at Promise._settlePromiseFromHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:1519:31)",
                 "diff": null
               },
-              "uuid": "f77f58ae-da50-41d8-a0d8-225207f2f9ae",
-              "parentUUID": "b5a5c300-f0cc-4f17-a154-e0bcae88a6a6",
+              "uuid": "2afce7d8-fa1f-4cfa-968c-7355922455cd",
+              "parentUUID": "15fa93ba-8e4e-48c8-9880-31d7a3ba2e6f",
               "isHook": false,
               "skipped": false
             },
@@ -96,7 +96,7 @@
               "title": "loading",
               "fullTitle": "Page /users/:userId loading",
               "timedOut": null,
-              "duration": 4547,
+              "duration": 4565,
               "state": "failed",
               "speed": null,
               "pass": false,
@@ -109,8 +109,8 @@
                 "estack": "AssertionError: Timed out retrying after 4000ms: Expected <div> not to exist in the DOM, but it was continuously found.\n    at Context.eval (webpack://frontend/./cypress/e2e/frontend/user.cy.js:105:31)\n    at runnable.fn (http://localhost:5173/__cypress/runner/cypress_runner.js:138654:19)\n    at callFn (http://localhost:5173/__cypress/runner/cypress_runner.js:157261:21)\n    at Runnable.run (http://localhost:5173/__cypress/runner/cypress_runner.js:157248:7)\n    at <unknown> (http://localhost:5173/__cypress/runner/cypress_runner.js:163172:30)\n    at PassThroughHandlerContext.finallyHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:4072:23)\n    at PassThroughHandlerContext.tryCatcher (http://localhost:5173/__cypress/runner/cypress_runner.js:1807:23)\n    at Promise._settlePromiseFromHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:1519:31)",
                 "diff": null
               },
-              "uuid": "e5087516-bd33-4420-88ee-090b5535ba02",
-              "parentUUID": "b5a5c300-f0cc-4f17-a154-e0bcae88a6a6",
+              "uuid": "f2a57e74-06a1-4e0c-b909-3688884ac07d",
+              "parentUUID": "15fa93ba-8e4e-48c8-9880-31d7a3ba2e6f",
               "isHook": false,
               "skipped": false
             },
@@ -118,7 +118,7 @@
               "title": "error",
               "fullTitle": "Page /users/:userId error",
               "timedOut": null,
-              "duration": 4556,
+              "duration": 4332,
               "state": "failed",
               "speed": null,
               "pass": false,
@@ -131,8 +131,8 @@
                 "estack": "AssertionError: Timed out retrying after 4000ms: Expected <div.text-center> not to exist in the DOM, but it was continuously found.\n    at Context.eval (webpack://frontend/./cypress/e2e/frontend/user.cy.js:119:34)\n    at runnable.fn (http://localhost:5173/__cypress/runner/cypress_runner.js:138654:19)\n    at callFn (http://localhost:5173/__cypress/runner/cypress_runner.js:157261:21)\n    at Runnable.run (http://localhost:5173/__cypress/runner/cypress_runner.js:157248:7)\n    at <unknown> (http://localhost:5173/__cypress/runner/cypress_runner.js:163172:30)\n    at PassThroughHandlerContext.finallyHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:4072:23)\n    at PassThroughHandlerContext.tryCatcher (http://localhost:5173/__cypress/runner/cypress_runner.js:1807:23)\n    at Promise._settlePromiseFromHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:1519:31)",
                 "diff": null
               },
-              "uuid": "4dda0ee9-ab1d-41d3-90cf-daac7855adaf",
-              "parentUUID": "b5a5c300-f0cc-4f17-a154-e0bcae88a6a6",
+              "uuid": "e80752cb-10fc-427a-90a2-6185a3b82d01",
+              "parentUUID": "15fa93ba-8e4e-48c8-9880-31d7a3ba2e6f",
               "isHook": false,
               "skipped": false
             },
@@ -140,7 +140,7 @@
               "title": "ready",
               "fullTitle": "Page /users/:userId ready",
               "timedOut": null,
-              "duration": 4557,
+              "duration": 4322,
               "state": "failed",
               "speed": null,
               "pass": false,
@@ -153,32 +153,32 @@
                 "estack": "AssertionError: Timed out retrying after 4000ms: Expected <div.alert.alert-danger.mt-3> not to exist in the DOM, but it was continuously found.\n    at Context.eval (webpack://frontend/./cypress/e2e/frontend/user.cy.js:128:32)\n    at runnable.fn (http://localhost:5173/__cypress/runner/cypress_runner.js:138654:19)\n    at callFn (http://localhost:5173/__cypress/runner/cypress_runner.js:157261:21)\n    at Runnable.run (http://localhost:5173/__cypress/runner/cypress_runner.js:157248:7)\n    at <unknown> (http://localhost:5173/__cypress/runner/cypress_runner.js:163172:30)\n    at PassThroughHandlerContext.finallyHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:4072:23)\n    at PassThroughHandlerContext.tryCatcher (http://localhost:5173/__cypress/runner/cypress_runner.js:1807:23)\n    at Promise._settlePromiseFromHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:1519:31)",
                 "diff": null
               },
-              "uuid": "b69d2167-6acf-4fd6-9bec-ab6f8a05add7",
-              "parentUUID": "b5a5c300-f0cc-4f17-a154-e0bcae88a6a6",
+              "uuid": "c29b25f9-23a8-432e-b013-76726230cec6",
+              "parentUUID": "15fa93ba-8e4e-48c8-9880-31d7a3ba2e6f",
               "isHook": false,
               "skipped": false
             }
           ],
           "suites": [],
           "passes": [
-            "7da396ac-e1e2-4c34-9c2c-a553d6bb0d7e",
-            "aed26d93-a618-4531-97fc-c6c8ec38e9af"
+            "ce287d19-10f5-4c5f-9c4b-54853ea7143b",
+            "c6d54636-5df4-4587-8151-98c4bf2562cb"
           ],
           "failures": [
-            "f77f58ae-da50-41d8-a0d8-225207f2f9ae",
-            "e5087516-bd33-4420-88ee-090b5535ba02",
-            "4dda0ee9-ab1d-41d3-90cf-daac7855adaf",
-            "b69d2167-6acf-4fd6-9bec-ab6f8a05add7"
+            "2afce7d8-fa1f-4cfa-968c-7355922455cd",
+            "f2a57e74-06a1-4e0c-b909-3688884ac07d",
+            "e80752cb-10fc-427a-90a2-6185a3b82d01",
+            "c29b25f9-23a8-432e-b013-76726230cec6"
           ],
           "pending": [],
           "skipped": [],
-          "duration": 19105,
+          "duration": 18464,
           "root": false,
           "rootEmpty": false,
           "_timeout": 2000
         },
         {
-          "uuid": "14a23421-cc08-4dd7-aac2-c17258c28340",
+          "uuid": "90978653-3b45-43aa-82ff-7f10059949ed",
           "title": "Page /users/me",
           "fullFile": "",
           "file": "",
@@ -189,7 +189,7 @@
               "title": "me as alice",
               "fullTitle": "Page /users/me me as alice",
               "timedOut": null,
-              "duration": 4599,
+              "duration": 4296,
               "state": "failed",
               "speed": null,
               "pass": false,
@@ -202,8 +202,8 @@
                 "estack": "AssertionError: Timed out retrying after 4000ms: expected '<h1.text-center>' to contain text 'alice', but the text was ' Utilisateur charly Admin'\n    at Context.eval (webpack://frontend/./cypress/e2e/frontend/user.cy.js:144:35)\n    at runnable.fn (http://localhost:5173/__cypress/runner/cypress_runner.js:138654:19)\n    at callFn (http://localhost:5173/__cypress/runner/cypress_runner.js:157261:21)\n    at Runnable.run (http://localhost:5173/__cypress/runner/cypress_runner.js:157248:7)\n    at <unknown> (http://localhost:5173/__cypress/runner/cypress_runner.js:163172:30)\n    at PassThroughHandlerContext.finallyHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:4072:23)\n    at PassThroughHandlerContext.tryCatcher (http://localhost:5173/__cypress/runner/cypress_runner.js:1807:23)\n    at Promise._settlePromiseFromHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:1519:31)",
                 "diff": "- ' Utilisateur charly Admin'\n+ 'alice'\n"
               },
-              "uuid": "a0c6dffe-00da-43a9-9f7f-8a6b578bfc43",
-              "parentUUID": "14a23421-cc08-4dd7-aac2-c17258c28340",
+              "uuid": "7b90296a-866e-46c0-8f69-5112699a772e",
+              "parentUUID": "90978653-3b45-43aa-82ff-7f10059949ed",
               "isHook": false,
               "skipped": false
             },
@@ -211,7 +211,7 @@
               "title": "me as bob",
               "fullTitle": "Page /users/me me as bob",
               "timedOut": null,
-              "duration": 4574,
+              "duration": 4336,
               "state": "failed",
               "speed": null,
               "pass": false,
@@ -224,8 +224,8 @@
                 "estack": "AssertionError: Timed out retrying after 4000ms: expected '<h1.text-center>' to contain text 'bob', but the text was ' Utilisateur charly Admin'\n    at Context.eval (webpack://frontend/./cypress/e2e/frontend/user.cy.js:157:35)\n    at runnable.fn (http://localhost:5173/__cypress/runner/cypress_runner.js:138654:19)\n    at callFn (http://localhost:5173/__cypress/runner/cypress_runner.js:157261:21)\n    at Runnable.run (http://localhost:5173/__cypress/runner/cypress_runner.js:157248:7)\n    at <unknown> (http://localhost:5173/__cypress/runner/cypress_runner.js:163172:30)\n    at PassThroughHandlerContext.finallyHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:4072:23)\n    at PassThroughHandlerContext.tryCatcher (http://localhost:5173/__cypress/runner/cypress_runner.js:1807:23)\n    at Promise._settlePromiseFromHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:1519:31)",
                 "diff": "- ' Utilisateur charly Admin'\n+ 'bob'\n"
               },
-              "uuid": "b393f9b9-bd3d-4ead-81de-82f2048af64d",
-              "parentUUID": "14a23421-cc08-4dd7-aac2-c17258c28340",
+              "uuid": "2a0765a0-3ce6-4e9c-ac7c-79feadaccb9e",
+              "parentUUID": "90978653-3b45-43aa-82ff-7f10059949ed",
               "isHook": false,
               "skipped": false
             },
@@ -233,7 +233,7 @@
               "title": "me as admin",
               "fullTitle": "Page /users/me me as admin",
               "timedOut": null,
-              "duration": 4586,
+              "duration": 4362,
               "state": "failed",
               "speed": null,
               "pass": false,
@@ -246,8 +246,8 @@
                 "estack": "AssertionError: Timed out retrying after 4000ms: expected '<h1.text-center>' to contain text 'admin', but the text was ' Utilisateur charly Admin'\n    at Context.eval (webpack://frontend/./cypress/e2e/frontend/user.cy.js:170:35)\n    at runnable.fn (http://localhost:5173/__cypress/runner/cypress_runner.js:138654:19)\n    at callFn (http://localhost:5173/__cypress/runner/cypress_runner.js:157261:21)\n    at Runnable.run (http://localhost:5173/__cypress/runner/cypress_runner.js:157248:7)\n    at <unknown> (http://localhost:5173/__cypress/runner/cypress_runner.js:163172:30)\n    at PassThroughHandlerContext.finallyHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:4072:23)\n    at PassThroughHandlerContext.tryCatcher (http://localhost:5173/__cypress/runner/cypress_runner.js:1807:23)\n    at Promise._settlePromiseFromHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:1519:31)",
                 "diff": "- ' Utilisateur charly Admin'\n+ 'admin'\n"
               },
-              "uuid": "15475a57-195c-41fc-8644-480461d65ab5",
-              "parentUUID": "14a23421-cc08-4dd7-aac2-c17258c28340",
+              "uuid": "9cc72472-7ba7-432d-8e20-4961724d917b",
+              "parentUUID": "90978653-3b45-43aa-82ff-7f10059949ed",
               "isHook": false,
               "skipped": false
             }
@@ -255,13 +255,13 @@
           "suites": [],
           "passes": [],
           "failures": [
-            "a0c6dffe-00da-43a9-9f7f-8a6b578bfc43",
-            "b393f9b9-bd3d-4ead-81de-82f2048af64d",
-            "15475a57-195c-41fc-8644-480461d65ab5"
+            "7b90296a-866e-46c0-8f69-5112699a772e",
+            "2a0765a0-3ce6-4e9c-ac7c-79feadaccb9e",
+            "9cc72472-7ba7-432d-8e20-4961724d917b"
           ],
           "pending": [],
           "skipped": [],
-          "duration": 13759,
+          "duration": 12994,
           "root": false,
           "rootEmpty": false,
           "_timeout": 2000
