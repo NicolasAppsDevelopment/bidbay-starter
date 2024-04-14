@@ -12,12 +12,68 @@ const route = useRoute();
 const user = ref(null);
 const loading = ref(false);
 const error = ref(null);
+const errorStr = ref("");
 
 let userId = computed(() => route.params.userId);
 
 const formatDate = (date: Date) => {
   return new Date(date).toLocaleDateString();
 };
+
+type Products ={
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  originalPrice: number;
+  lastPrice: number;
+  pictureUrl: string;
+  endDate: string;
+  bids: {
+    id: string;
+  }[];
+}[];
+const products: Ref<Products> = ref([]);
+
+type Bid ={
+  id: string;
+  price: number;
+  date: Date;
+  product: {
+    id: string;
+    name: string;
+  }[];
+}[];
+const bids: Ref<Bid> = ref([]);
+
+async function fetchProductsBids() {
+  loading.value = true;
+  error.value = false;
+
+  try {
+    const res = await fetch(API_URL + '/api/users/'+userId);
+    const jsonRes = await res.json();
+    if (res.status != 200 || (jsonRes['status'] != undefined && jsonRes['status'] != 200)) {
+      throw new Error("Le serveur à retourner une erreur.");
+    }
+    console.log(jsonRes);
+    products.value = jsonRes.map(item => item.products);
+    bids.value = jsonRes.map(item => item.bids);
+    console.log("PRODUCTS OF USER");
+    console.log(products.value);
+    console.log(bids.value);
+  } catch (e) {
+    errorStr.value = "Une erreur est survenue lors du chargement des produits."
+    if (e instanceof Error){
+      errorStr.value += " " + e.message;
+    } 
+    error.value = true;
+  } finally {
+    loading.value = false;
+  }
+}
+
+fetchProductsBids();
 </script>
 
 <template>
@@ -46,10 +102,10 @@ const formatDate = (date: Date) => {
             >
               <div class="card">
                 <RouterLink
-                  :to="{ name: 'Product', params: { productId: 'TODO' } }"
+                  :to="{ name: 'Product', params: { productId: products.id } }"
                 >
                   <img
-                    src="https://image.noelshack.com/fichiers/2023/12/4/1679526253-65535-51925549650-96f088a093-b-512-512-nofilter.jpg"
+                    :src="products.pictureUrl"
                     class="card-img-top"
                     data-test-product-picture
                   />
@@ -59,20 +115,18 @@ const formatDate = (date: Date) => {
                     <RouterLink
                       :to="{
                         name: 'Product',
-                        params: { productId: 'TODO' },
+                        params: { productId: products.id },
                       }"
                       data-test-product-name
                     >
-                      Chapeau en poil de chameau
+                    {{ productS.name }} 
                     </RouterLink>
                   </h5>
                   <p class="card-text" data-test-product-description>
-                    Ce chapeau en poil de chameau est un véritable chef-d'œuvre
-                    artisanal, doux au toucher et résistant pour une durabilité
-                    à long terme.
+                    {{ product.description }} 
                   </p>
                   <p class="card-text" data-test-product-price>
-                    Prix de départ : 23 €
+                    {{ product.originalPrice }} 
                   </p>
                 </div>
               </div>
@@ -81,6 +135,7 @@ const formatDate = (date: Date) => {
         </div>
         <div class="col-lg-6">
           <h2>Offres</h2>
+          <h3>Nombre d'offres : {{ productS.bids.length }} </h3>
           <table class="table table-striped">
             <thead>
               <tr>
@@ -94,16 +149,16 @@ const formatDate = (date: Date) => {
                 <td>
                   <RouterLink
                     :to="{
-                      name: 'Product',
-                      params: { productId: 'TODO' },
+                      name: 'Bid',
+                      params: { bidId: bids.id },
                     }"
                     data-test-bid-product
                   >
-                    Théière design
+                    {{ bids.product.name }} 
                   </RouterLink>
                 </td>
-                <td data-test-bid-price>713 €</td>
-                <td data-test-bid-date>{{ formatDate(new Date()) }}</td>
+                <td data-test-bid-price>{{ bids.price }} </td>
+                <td data-test-bid-date>{{ bids.date }}</td>
               </tr>
             </tbody>
           </table>

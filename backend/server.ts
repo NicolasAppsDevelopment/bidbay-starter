@@ -23,9 +23,7 @@ async function main () {
   app.use(bidRoutes)
 
   let users= await User.findAll({where: { admin: false}});
-  console.log(users);
   await User.create({ username: "Lena",email:"mailaupi@getMaxListeners.com",password:"e-èjuy,yyyyyyyyyyyyyyyyyyyy", admin: false });
-  console.log(users);
 
   app.listen(process.env.PORT || 3000, () => {
     console.log('(from server.ts) Server started on port 3000')

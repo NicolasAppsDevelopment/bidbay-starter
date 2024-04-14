@@ -5,9 +5,9 @@
     "passes": 3,
     "pending": 0,
     "failures": 0,
-    "start": "2024-04-14T16:44:04.565Z",
-    "end": "2024-04-14T16:44:04.974Z",
-    "duration": 409,
+    "start": "2024-04-14T21:58:58.553Z",
+    "end": "2024-04-14T21:59:00.738Z",
+    "duration": 2185,
     "testsRegistered": 3,
     "passPercent": 100,
     "pendingPercent": 0,
@@ -18,7 +18,7 @@
   },
   "results": [
     {
-      "uuid": "45aa5440-f755-4823-9d57-4217b829d471",
+      "uuid": "4012049d-f8da-4562-9bc2-cfea26d90379",
       "title": "",
       "fullFile": "cypress\\e2e\\frontend\\edit-product.cy.js",
       "file": "cypress\\e2e\\frontend\\edit-product.cy.js",
@@ -27,7 +27,7 @@
       "tests": [],
       "suites": [
         {
-          "uuid": "68c6176e-bbbe-4ff3-9e3b-d84232f8da4e",
+          "uuid": "12639309-872b-4fa3-ad7f-5f0937e46bfa",
           "title": "Page /products/:productId/edit",
           "fullFile": "",
           "file": "",
@@ -38,7 +38,7 @@
               "title": "post product",
               "fullTitle": "Page /products/:productId/edit post product",
               "timedOut": null,
-              "duration": 209,
+              "duration": 782,
               "state": "passed",
               "speed": "fast",
               "pass": true,
@@ -47,8 +47,8 @@
               "context": null,
               "code": "(0, _orm.createProduct)().then(({\n  product\n}) => {\n  // Note : Test le scénario de modification de produit réussi\n  cy.visit(`http://localhost:5173/products/${product.id}/edit`, {\n    onBeforeLoad: function (window) {\n      window.localStorage.setItem(\"token\", _tokens.aliceToken);\n    }\n  });\n  const newProduct = (0, _orm.buildProduct)();\n  cy.get(\"[data-test-product-name]\").type(\"{selectAll}{del}\");\n  cy.get(\"[data-test-product-name]\").type(newProduct.name);\n  cy.get(\"[data-test-product-description]\").type(\"{selectAll}{del}\");\n  cy.get(\"[data-test-product-description]\").type(newProduct.description);\n  cy.get(\"[data-test-product-category]\").type(\"{selectAll}{del}\");\n  cy.get(\"[data-test-product-category]\").type(newProduct.category);\n  cy.get(\"[data-test-product-price]\").type(\"{selectAll}{del}\");\n  cy.get(\"[data-test-product-price]\").type(newProduct.originalPrice);\n  cy.get(\"[data-test-product-picture]\").type(\"{selectAll}{del}\");\n  cy.get(\"[data-test-product-picture]\").type(newProduct.pictureUrl);\n  cy.get(\"[data-test-product-end-date]\").type(\"{selectAll}{del}\");\n  cy.get(\"[data-test-product-end-date]\").type((0, _automate.prepareDateToType)(newProduct.endDate));\n  cy.intercept(\"PUT\", \"http://localhost:3000/api/products/\" + product.id).as(\"putProduct\");\n  cy.get(\"[data-test-submit]\").click();\n  cy.wait(\"@putProduct\").then(interception => {\n    expect(interception.response.statusCode).to.eq(200);\n    const id = interception.response.body.id;\n    cy.url().should(\"contain\", `/products/${id}`);\n  });\n});",
               "err": {},
-              "uuid": "e86ebf60-08a4-4825-9c4e-133fa905ed37",
-              "parentUUID": "68c6176e-bbbe-4ff3-9e3b-d84232f8da4e",
+              "uuid": "a9294d84-af9f-42cc-aae0-d72b6ea91938",
+              "parentUUID": "12639309-872b-4fa3-ad7f-5f0937e46bfa",
               "isHook": false,
               "skipped": false
             },
@@ -56,7 +56,7 @@
               "title": "display spinner",
               "fullTitle": "Page /products/:productId/edit display spinner",
               "timedOut": null,
-              "duration": 88,
+              "duration": 671,
               "state": "passed",
               "speed": "fast",
               "pass": true,
@@ -65,8 +65,8 @@
               "context": null,
               "code": "// Note : Test la présence d'un spinner lors de l'envoi de la requête\n(0, _orm.createProduct)().then(({\n  product\n}) => {\n  cy.visit(`http://localhost:5173/products/${product.id}/edit`, {\n    onBeforeLoad: function (window) {\n      window.localStorage.setItem(\"token\", _tokens.aliceToken);\n    }\n  });\n  const newProduct = (0, _orm.buildProduct)();\n  cy.get(\"[data-test-product-name]\").type(\"{selectAll}{del}\");\n  cy.get(\"[data-test-product-name]\").type(newProduct.name);\n  cy.get(\"[data-test-product-description]\").type(\"{selectAll}{del}\");\n  cy.get(\"[data-test-product-description]\").type(newProduct.description);\n  cy.get(\"[data-test-product-category]\").type(\"{selectAll}{del}\");\n  cy.get(\"[data-test-product-category]\").type(newProduct.category);\n  cy.get(\"[data-test-product-price]\").type(\"{selectAll}{del}\");\n  cy.get(\"[data-test-product-price]\").type(newProduct.originalPrice);\n  cy.get(\"[data-test-product-picture]\").type(\"{selectAll}{del}\");\n  cy.get(\"[data-test-product-picture]\").type(newProduct.pictureUrl);\n  cy.get(\"[data-test-product-end-date]\").type(\"{selectAll}{del}\");\n  cy.get(\"[data-test-product-end-date]\").type((0, _automate.prepareDateToType)(newProduct.endDate));\n  cy.intercept(\"PUT\", \"http://localhost:3000/api/products/\" + product.id, {\n    delay: 2000\n  }).as(\"putProduct\");\n  cy.get(\"[data-test-submit]\").click();\n  cy.get(\"[data-test-submit]\").should(\"have.attr\", \"disabled\");\n  cy.get(\"[data-test-spinner]\").should(\"exist\");\n});",
               "err": {},
-              "uuid": "ea90e8cd-cd8e-464f-839d-63195451422e",
-              "parentUUID": "68c6176e-bbbe-4ff3-9e3b-d84232f8da4e",
+              "uuid": "ba016f16-a7d2-4602-9233-429b531d9672",
+              "parentUUID": "12639309-872b-4fa3-ad7f-5f0937e46bfa",
               "isHook": false,
               "skipped": false
             },
@@ -74,7 +74,7 @@
               "title": "display error",
               "fullTitle": "Page /products/:productId/edit display error",
               "timedOut": null,
-              "duration": 79,
+              "duration": 512,
               "state": "passed",
               "speed": "fast",
               "pass": true,
@@ -83,22 +83,22 @@
               "context": null,
               "code": "// Note : Test le scénario d'un ajout de produit avec un échec\n(0, _orm.createProduct)().then(({\n  product\n}) => {\n  cy.visit(`http://localhost:5173/products/${product.id}/edit`, {\n    onBeforeLoad: function (window) {\n      window.localStorage.setItem(\"token\", _tokens.aliceToken);\n    }\n  });\n  cy.get(\"[data-test-error]\").should(\"not.exist\");\n  const newProduct = (0, _orm.buildProduct)();\n  cy.get(\"[data-test-product-name]\").type(\"{selectAll}{del}\");\n  cy.get(\"[data-test-product-name]\").type(newProduct.name);\n  cy.get(\"[data-test-product-description]\").type(\"{selectAll}{del}\");\n  cy.get(\"[data-test-product-description]\").type(newProduct.description);\n  cy.get(\"[data-test-product-category]\").type(\"{selectAll}{del}\");\n  cy.get(\"[data-test-product-category]\").type(newProduct.category);\n  cy.get(\"[data-test-product-price]\").type(\"{selectAll}{del}\");\n  cy.get(\"[data-test-product-price]\").type(newProduct.originalPrice);\n  cy.get(\"[data-test-product-picture]\").type(\"{selectAll}{del}\");\n  cy.get(\"[data-test-product-picture]\").type(newProduct.pictureUrl);\n  cy.get(\"[data-test-product-end-date]\").type(\"{selectAll}{del}\");\n  cy.get(\"[data-test-product-end-date]\").type((0, _automate.prepareDateToType)(newProduct.endDate));\n  cy.intercept(\"PUT\", \"http://localhost:3000/api/products/\" + product.id, {\n    statusCode: 500\n  }).as(\"putProduct\");\n  cy.get(\"[data-test-submit]\").click();\n  cy.get(\"[data-test-error]\").should(\"exist\");\n});",
               "err": {},
-              "uuid": "a4602e0b-5632-4cde-a117-bfc96050124e",
-              "parentUUID": "68c6176e-bbbe-4ff3-9e3b-d84232f8da4e",
+              "uuid": "1a180cbd-4597-4685-8d98-5cffcc328dad",
+              "parentUUID": "12639309-872b-4fa3-ad7f-5f0937e46bfa",
               "isHook": false,
               "skipped": false
             }
           ],
           "suites": [],
           "passes": [
-            "e86ebf60-08a4-4825-9c4e-133fa905ed37",
-            "ea90e8cd-cd8e-464f-839d-63195451422e",
-            "a4602e0b-5632-4cde-a117-bfc96050124e"
+            "a9294d84-af9f-42cc-aae0-d72b6ea91938",
+            "ba016f16-a7d2-4602-9233-429b531d9672",
+            "1a180cbd-4597-4685-8d98-5cffcc328dad"
           ],
           "failures": [],
           "pending": [],
           "skipped": [],
-          "duration": 376,
+          "duration": 1965,
           "root": false,
           "rootEmpty": false,
           "_timeout": 2000

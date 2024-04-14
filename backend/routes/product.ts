@@ -45,7 +45,7 @@ router.get('/api/products', async (req, res, next) => {
 })
 
 router.get('/api/products/:productId', async (req, res) => {
-  const products = await Product.findOne({
+  const product = await Product.findOne({
     where:{ 
       'id' : req.params.productId
     }, 
@@ -79,12 +79,20 @@ router.get('/api/products/:productId', async (req, res) => {
     ]
   });
 
-  if (products==null){
+  if (product==null){
     res.status(404).json({ "error": "Product not found" });
     return;
   }
+
+    // Sort bids by price and set lastPrice for each product
+    product.bids.sort((a, b) => b.date.getTime() - a.date.getTime());
+    if (product.bids.length == 0) { 
+      product.setDataValue("lastPrice", product.originalPrice);
+    } else {
+      product.setDataValue("lastPrice", product.bids[0].price);
+    }
   
-  res.status(200).send(products);
+  res.status(200).send(product);
 })
 
 // You can use the authMiddleware with req.user.id to authenticate your endpoint ;)

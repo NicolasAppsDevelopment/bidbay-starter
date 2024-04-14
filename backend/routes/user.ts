@@ -34,7 +34,6 @@ router.get('/api/users/:userId', async (req, res) => {
     res.status(404).send("User not found");
     return;
   }
-  console.log(user.toJSON());
   res.status(200).send(user);
 })
 

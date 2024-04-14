@@ -20,10 +20,12 @@ function formatDate(date: number|string|Date) {
   return new Date(date).toLocaleDateString("fr-FR", options);
 }
 
+const newPriceInput = ref('');
 const loading = ref(false);
 const error = ref(false);
 const errorStr = ref("");
 const countdown = ref("...");
+const finished = ref(false);
 type Product = {
   id: string,
   name: string,
@@ -47,20 +49,7 @@ type Product = {
     }
   }[]
 };
-const product: Ref<Product> = ref({
-  "id": "",
-  "name": "",
-  "description": "",
-  "category": "",
-  "originalPrice": 0,
-  "pictureUrl": "",
-  "endDate": "2023-03-23T17:29:12.261Z",
-  "seller": {
-      "id": "",
-      "username": ""
-  },
-  "bids": []
-});
+const product: Ref<Product | null> = ref();
 
 function startTimer() {
   let end = new Date(product.value.endDate);
@@ -69,14 +58,15 @@ function startTimer() {
     
     let sec = Math.round((end.getTime() - now.getTime()) / 1000);
     if (sec <= 0) {
-      countdown.value = "Vente terminée";
+      finished.value = true;
       clearInterval(timerInterval);
     } else {
       let str_s = sec % 60;
       let str_m = Math.floor(sec / 60) % 60;
-      let str_h = Math.floor(sec / (60 * 60));
+      let str_h = Math.floor(sec / (60 * 60)) % 24;
+      let str_j = Math.floor(sec / (60 * 60 * 24));
 
-      countdown.value = (str_h < 10 ? "0" + str_h : str_h)  + ":" + (str_m < 10 ? "0" + str_m : str_m) + ":" + (str_s < 10 ? "0" + str_s : str_s)
+      countdown.value = str_j + "j " + str_h + "h " + str_m + "min " + str_s + "s"
     }
   }, 1000);
 }
@@ -86,8 +76,14 @@ async function fetchProduct(id: string | string[]) {
   error.value = false;
 
   try {
-    const res = await fetch(API_URL + 'api/product/' + id);
-    product.value = await res.json();
+    const res = await fetch(API_URL + 'api/products/' + id);
+    const jsonRes = await res.json();
+    if (res.status != 200 || (jsonRes['status'] != undefined && jsonRes['status'] != 200)) {
+      throw new Error("Le serveur à retourner une erreur.");
+    }
+
+    product.value = jsonRes;
+    newPriceInput.value = jsonRes.lastPrice + 1;
     startTimer();
   } catch (e) {
     errorStr.value = "Une erreur est survenue lors du chargement du produit."
@@ -105,7 +101,7 @@ async function removeProduct() {
   error.value = false;
 
   try {
-    const res = await fetch(API_URL + 'api/product/' + productId, {
+    const res = await fetch(API_URL + 'api/products/' + productId, {
       method: 'DELETE',
       headers: {
         "Authorization": "Barear " + token
@@ -137,11 +133,11 @@ fetchProduct(productId.value);
     <div v-if="error === true" class="alert alert-danger mt-4" role="alert" data-test-error>
       {{ errorStr }} 
     </div>
-    <div class="row" data-test-product>
+    <div v-if="product != null" class="row" data-test-product>
       <!-- Colonne de gauche : image et compte à rebours -->
       <div class="col-lg-4">
         <img
-          src="https://picsum.photos/id/250/512/512"
+          :src="product.pictureUrl"
           alt=""
           class="img-fluid rounded mb-3"
           data-test-product-picture
@@ -152,7 +148,7 @@ fetchProduct(productId.value);
           </div>
           <div class="card-body">
             <h6 class="card-subtitle mb-2 text-muted" data-test-countdown>
-              Temps restant : {{ countdown }}
+              {{ finished == true ? "Terminé" : "Temps restant : " + countdown }}
             </h6>
           </div>
         </div>
@@ -198,7 +194,7 @@ fetchProduct(productId.value);
           <li>
             Vendeur :
             <router-link
-              :to="{ name: 'User', params: { userId: product?.seller.id } }"
+              :to="{ name: 'User', params: { userId: product.seller.id } }"
               data-test-product-seller
             >
             {{ product.seller.username }}
@@ -236,12 +232,13 @@ fetchProduct(productId.value);
             </tr>
           </tbody>
         </table>
-        <p data-test-no-bids>Aucune offre pour le moment</p>
+        <p v-if="product.bids.length == 0" data-test-no-bids>Aucune offre pour le moment</p>
 
         <form data-test-bid-form>
           <div class="form-group">
             <label for="bidAmount">Votre offre :</label>
             <input
+              v-model="newPriceInput"
               type="number"
               class="form-control"
               id="bidAmount"
@@ -254,7 +251,7 @@ fetchProduct(productId.value);
           <button
             type="submit"
             class="btn btn-primary"
-            disabled
+            :disabled="newPriceInput <= product.lastPrice"
             data-test-submit-bid
           >
             Enchérir

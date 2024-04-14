@@ -5,9 +5,9 @@
     "passes": 2,
     "pending": 0,
     "failures": 7,
-    "start": "2024-04-14T16:44:12.923Z",
-    "end": "2024-04-14T16:44:45.752Z",
-    "duration": 32829,
+    "start": "2024-04-14T21:59:27.854Z",
+    "end": "2024-04-14T21:59:44.203Z",
+    "duration": 16349,
     "testsRegistered": 9,
     "passPercent": 22.22222222222222,
     "pendingPercent": 0,
@@ -18,7 +18,7 @@
   },
   "results": [
     {
-      "uuid": "2c20098e-f33b-4353-b77f-052ee34d55a2",
+      "uuid": "cadf653f-4761-4c63-8664-129327cebd98",
       "title": "",
       "fullFile": "cypress\\e2e\\frontend\\user.cy.js",
       "file": "cypress\\e2e\\frontend\\user.cy.js",
@@ -27,7 +27,7 @@
       "tests": [],
       "suites": [
         {
-          "uuid": "15fa93ba-8e4e-48c8-9880-31d7a3ba2e6f",
+          "uuid": "6de7aa81-18d1-4e67-a5ef-d54b86b8fedf",
           "title": "Page /users/:userId",
           "fullFile": "",
           "file": "",
@@ -38,7 +38,7 @@
               "title": "display products",
               "fullTitle": "Page /users/:userId display products",
               "timedOut": null,
-              "duration": 121,
+              "duration": 1089,
               "state": "passed",
               "speed": "fast",
               "pass": true,
@@ -47,8 +47,8 @@
               "context": null,
               "code": "// Note : Test le scénario de récupération et d'affichage des produits\n(0, _orm.createProduct)().then(({\n  product\n}) => {\n  cy.visit(`http://localhost:5173/users/${_tokens.aliceId}`);\n  cy.get(\"[data-test-product]\").should(\"have.length\", 8);\n  cy.get(\"[data-test-product]\").last().find(\"[data-test-product-name]\").should(\"have.text\", product.name).invoke(\"attr\", \"href\").should(\"contain\", product.id);\n  cy.get(\"[data-test-product]\").last().find(\"[data-test-product-description]\").should(\"have.text\", product.description);\n  cy.get(\"[data-test-product]\").last().find(\"[data-test-product-price]\").should(\"contain.text\", product.originalPrice + \" €\");\n  cy.get(\"[data-test-product]\").last().find(\"[data-test-product-picture]\").invoke(\"attr\", \"src\").should(\"eq\", product.pictureUrl);\n});",
               "err": {},
-              "uuid": "ce287d19-10f5-4c5f-9c4b-54853ea7143b",
-              "parentUUID": "15fa93ba-8e4e-48c8-9880-31d7a3ba2e6f",
+              "uuid": "6ce4605e-086a-4202-bd97-8a1a10a1736c",
+              "parentUUID": "6de7aa81-18d1-4e67-a5ef-d54b86b8fedf",
               "isHook": false,
               "skipped": false
             },
@@ -56,7 +56,7 @@
               "title": "display bids",
               "fullTitle": "Page /users/:userId display bids",
               "timedOut": null,
-              "duration": 88,
+              "duration": 515,
               "state": "passed",
               "speed": "fast",
               "pass": true,
@@ -65,8 +65,8 @@
               "context": null,
               "code": "// Note : Test le scénario de récupération et d'affichage des offres\n(0, _orm.createProduct)(\"futur\", _tokens.bobToken).then(({\n  product\n}) => {\n  (0, _orm.createBid)(product.id, product.originalPrice, _tokens.aliceToken).then(({\n    bid\n  }) => {\n    cy.visit(`http://localhost:5173/users/${_tokens.aliceId}`);\n    cy.get(\"[data-test-bid]\").should(\"exist\");\n    cy.get(`[data-test-bid-product][href$=\"${product.id}\"]`).should(\"exist\").first().closest(\"[data-test-bid]\").then(el => {\n      cy.wrap(el).find(\"[data-test-bid-product]\").should(\"have.text\", product.name);\n      cy.wrap(el).find(\"[data-test-bid-price]\").should(\"have.text\", bid.price + \" €\");\n      cy.wrap(el).find(\"[data-test-bid-date]\").should(\"contain.text\", new Date().getDate()).should(\"contain.text\", new Date().getMonth() + 1).should(\"contain.text\", new Date().getFullYear());\n    });\n  });\n});",
               "err": {},
-              "uuid": "c6d54636-5df4-4587-8151-98c4bf2562cb",
-              "parentUUID": "15fa93ba-8e4e-48c8-9880-31d7a3ba2e6f",
+              "uuid": "12a4b06d-b2d1-472f-9a06-452430bbeb98",
+              "parentUUID": "6de7aa81-18d1-4e67-a5ef-d54b86b8fedf",
               "isHook": false,
               "skipped": false
             },
@@ -74,7 +74,7 @@
               "title": "no admin badge",
               "fullTitle": "Page /users/:userId no admin badge",
               "timedOut": null,
-              "duration": 5036,
+              "duration": 1979,
               "state": "failed",
               "speed": null,
               "pass": false,
@@ -83,12 +83,12 @@
               "context": null,
               "code": "// Note : Vérifie qu'un utilisateur a un badge admin si et seulement si il est admin\ncy.visit(`http://localhost:5173/users/${_tokens.aliceId}`);\ncy.get(\"[data-test-admin]\").should(\"not.exist\");\ncy.visit(`http://localhost:5173/users/${_tokens.adminId}`);\ncy.get(\"[data-test-admin]\").should(\"exist\");",
               "err": {
-                "message": "AssertionError: Timed out retrying after 4000ms: Expected <span.badge.rounded-pill.bg-primary> not to exist in the DOM, but it was continuously found.",
-                "estack": "AssertionError: Timed out retrying after 4000ms: Expected <span.badge.rounded-pill.bg-primary> not to exist in the DOM, but it was continuously found.\n    at Context.eval (webpack://frontend/./cypress/e2e/frontend/user.cy.js:88:32)\n    at runnable.fn (http://localhost:5173/__cypress/runner/cypress_runner.js:138654:19)\n    at callFn (http://localhost:5173/__cypress/runner/cypress_runner.js:157261:21)\n    at Runnable.run (http://localhost:5173/__cypress/runner/cypress_runner.js:157248:7)\n    at <unknown> (http://localhost:5173/__cypress/runner/cypress_runner.js:163172:30)\n    at PassThroughHandlerContext.finallyHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:4072:23)\n    at PassThroughHandlerContext.tryCatcher (http://localhost:5173/__cypress/runner/cypress_runner.js:1807:23)\n    at Promise._settlePromiseFromHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:1519:31)",
+                "message": "TypeError: The following error originated from your application code, not from Cypress. It was caused by an unhandled promise rejection.\n\n  > Cannot read properties of undefined (reading 'description')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.\n\nhttps://on.cypress.io/uncaught-exception-from-application",
+                "estack": "TypeError: The following error originated from your application code, not from Cypress. It was caused by an unhandled promise rejection.\n\n  > Cannot read properties of undefined (reading 'description')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.\n\nhttps://on.cypress.io/uncaught-exception-from-application\n    at <unknown> (http://localhost:5173/src/views/UserView.vue?t=1713131676187:161:55)\n    at renderList (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:4349:16)\n    at Proxy._sfc_render (http://localhost:5173/src/views/UserView.vue?t=1713131676187:118:15)\n    at renderComponentRoot (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:2343:17)\n    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7455:46)\n    at ReactiveEffect.run (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:430:19)\n    at instance.update (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7586:17)\n    at setupRenderEffect (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7596:5)\n    at mountComponent (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7364:7)\n    at processComponent (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7318:9)",
                 "diff": null
               },
-              "uuid": "2afce7d8-fa1f-4cfa-968c-7355922455cd",
-              "parentUUID": "15fa93ba-8e4e-48c8-9880-31d7a3ba2e6f",
+              "uuid": "0ffd2d26-9305-42d4-b7eb-9cfb83d2534e",
+              "parentUUID": "6de7aa81-18d1-4e67-a5ef-d54b86b8fedf",
               "isHook": false,
               "skipped": false
             },
@@ -96,7 +96,7 @@
               "title": "loading",
               "fullTitle": "Page /users/:userId loading",
               "timedOut": null,
-              "duration": 4565,
+              "duration": 1145,
               "state": "failed",
               "speed": null,
               "pass": false,
@@ -105,12 +105,12 @@
               "context": null,
               "code": "// Note : Vérifie la présence d'un spinner au chargement\ncy.intercept(`http://localhost:3000/api/users/${_tokens.aliceId}`, {\n  delay: 10000\n});\ncy.visit(`http://localhost:5173/users/${_tokens.aliceId}`);\ncy.get(\"[data-test-loading]\").should(\"exist\");\ncy.get(\"[data-test-view]\").should(\"not.exist\");\ncy.get(\"[data-test-error]\").should(\"not.exist\");",
               "err": {
-                "message": "AssertionError: Timed out retrying after 4000ms: Expected <div> not to exist in the DOM, but it was continuously found.",
-                "estack": "AssertionError: Timed out retrying after 4000ms: Expected <div> not to exist in the DOM, but it was continuously found.\n    at Context.eval (webpack://frontend/./cypress/e2e/frontend/user.cy.js:105:31)\n    at runnable.fn (http://localhost:5173/__cypress/runner/cypress_runner.js:138654:19)\n    at callFn (http://localhost:5173/__cypress/runner/cypress_runner.js:157261:21)\n    at Runnable.run (http://localhost:5173/__cypress/runner/cypress_runner.js:157248:7)\n    at <unknown> (http://localhost:5173/__cypress/runner/cypress_runner.js:163172:30)\n    at PassThroughHandlerContext.finallyHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:4072:23)\n    at PassThroughHandlerContext.tryCatcher (http://localhost:5173/__cypress/runner/cypress_runner.js:1807:23)\n    at Promise._settlePromiseFromHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:1519:31)",
+                "message": "TypeError: The following error originated from your application code, not from Cypress. It was caused by an unhandled promise rejection.\n\n  > Cannot read properties of undefined (reading 'description')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.\n\nhttps://on.cypress.io/uncaught-exception-from-application",
+                "estack": "TypeError: The following error originated from your application code, not from Cypress. It was caused by an unhandled promise rejection.\n\n  > Cannot read properties of undefined (reading 'description')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.\n\nhttps://on.cypress.io/uncaught-exception-from-application\n    at <unknown> (http://localhost:5173/src/views/UserView.vue?t=1713131676187:161:55)\n    at renderList (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:4349:16)\n    at Proxy._sfc_render (http://localhost:5173/src/views/UserView.vue?t=1713131676187:118:15)\n    at renderComponentRoot (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:2343:17)\n    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7455:46)\n    at ReactiveEffect.run (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:430:19)\n    at instance.update (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7586:17)\n    at setupRenderEffect (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7596:5)\n    at mountComponent (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7364:7)\n    at processComponent (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7318:9)",
                 "diff": null
               },
-              "uuid": "f2a57e74-06a1-4e0c-b909-3688884ac07d",
-              "parentUUID": "15fa93ba-8e4e-48c8-9880-31d7a3ba2e6f",
+              "uuid": "4214deb0-379c-4b5f-80af-f334777a81bf",
+              "parentUUID": "6de7aa81-18d1-4e67-a5ef-d54b86b8fedf",
               "isHook": false,
               "skipped": false
             },
@@ -118,7 +118,7 @@
               "title": "error",
               "fullTitle": "Page /users/:userId error",
               "timedOut": null,
-              "duration": 4332,
+              "duration": 1346,
               "state": "failed",
               "speed": null,
               "pass": false,
@@ -127,12 +127,12 @@
               "context": null,
               "code": "// Note : Vérifie la présence d'une erreur en cas d'échec de chargement\ncy.intercept(`http://localhost:3000/api/users/${_tokens.aliceId}`, {\n  statusCode: 500\n});\ncy.visit(`http://localhost:5173/users/${_tokens.aliceId}`);\ncy.get(\"[data-test-error]\").should(\"exist\");\ncy.get(\"[data-test-loading]\").should(\"not.exist\");\ncy.get(\"[data-test-view]\").should(\"not.exist\");",
               "err": {
-                "message": "AssertionError: Timed out retrying after 4000ms: Expected <div.text-center> not to exist in the DOM, but it was continuously found.",
-                "estack": "AssertionError: Timed out retrying after 4000ms: Expected <div.text-center> not to exist in the DOM, but it was continuously found.\n    at Context.eval (webpack://frontend/./cypress/e2e/frontend/user.cy.js:119:34)\n    at runnable.fn (http://localhost:5173/__cypress/runner/cypress_runner.js:138654:19)\n    at callFn (http://localhost:5173/__cypress/runner/cypress_runner.js:157261:21)\n    at Runnable.run (http://localhost:5173/__cypress/runner/cypress_runner.js:157248:7)\n    at <unknown> (http://localhost:5173/__cypress/runner/cypress_runner.js:163172:30)\n    at PassThroughHandlerContext.finallyHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:4072:23)\n    at PassThroughHandlerContext.tryCatcher (http://localhost:5173/__cypress/runner/cypress_runner.js:1807:23)\n    at Promise._settlePromiseFromHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:1519:31)",
+                "message": "TypeError: The following error originated from your application code, not from Cypress. It was caused by an unhandled promise rejection.\n\n  > Cannot read properties of undefined (reading 'description')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.\n\nhttps://on.cypress.io/uncaught-exception-from-application",
+                "estack": "TypeError: The following error originated from your application code, not from Cypress. It was caused by an unhandled promise rejection.\n\n  > Cannot read properties of undefined (reading 'description')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.\n\nhttps://on.cypress.io/uncaught-exception-from-application\n    at <unknown> (http://localhost:5173/src/views/UserView.vue?t=1713131676187:161:55)\n    at renderList (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:4349:16)\n    at Proxy._sfc_render (http://localhost:5173/src/views/UserView.vue?t=1713131676187:118:15)\n    at renderComponentRoot (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:2343:17)\n    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7455:46)\n    at ReactiveEffect.run (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:430:19)\n    at instance.update (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7586:17)\n    at setupRenderEffect (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7596:5)\n    at mountComponent (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7364:7)\n    at processComponent (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7318:9)",
                 "diff": null
               },
-              "uuid": "e80752cb-10fc-427a-90a2-6185a3b82d01",
-              "parentUUID": "15fa93ba-8e4e-48c8-9880-31d7a3ba2e6f",
+              "uuid": "4d3c4259-93ad-4f93-9121-6baaf3b3ae74",
+              "parentUUID": "6de7aa81-18d1-4e67-a5ef-d54b86b8fedf",
               "isHook": false,
               "skipped": false
             },
@@ -140,7 +140,7 @@
               "title": "ready",
               "fullTitle": "Page /users/:userId ready",
               "timedOut": null,
-              "duration": 4322,
+              "duration": 1345,
               "state": "failed",
               "speed": null,
               "pass": false,
@@ -149,36 +149,36 @@
               "context": null,
               "code": "// Note : Vérifie la présence du contenu quand tout s'est bien chargé\ncy.visit(`http://localhost:5173/users/${_tokens.aliceId}`);\ncy.get(\"[data-test-error]\").should(\"not.exist\");\ncy.get(\"[data-test-loading]\").should(\"not.exist\");\ncy.get(\"[data-test-view]\").should(\"exist\");",
               "err": {
-                "message": "AssertionError: Timed out retrying after 4000ms: Expected <div.alert.alert-danger.mt-3> not to exist in the DOM, but it was continuously found.",
-                "estack": "AssertionError: Timed out retrying after 4000ms: Expected <div.alert.alert-danger.mt-3> not to exist in the DOM, but it was continuously found.\n    at Context.eval (webpack://frontend/./cypress/e2e/frontend/user.cy.js:128:32)\n    at runnable.fn (http://localhost:5173/__cypress/runner/cypress_runner.js:138654:19)\n    at callFn (http://localhost:5173/__cypress/runner/cypress_runner.js:157261:21)\n    at Runnable.run (http://localhost:5173/__cypress/runner/cypress_runner.js:157248:7)\n    at <unknown> (http://localhost:5173/__cypress/runner/cypress_runner.js:163172:30)\n    at PassThroughHandlerContext.finallyHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:4072:23)\n    at PassThroughHandlerContext.tryCatcher (http://localhost:5173/__cypress/runner/cypress_runner.js:1807:23)\n    at Promise._settlePromiseFromHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:1519:31)",
+                "message": "TypeError: The following error originated from your application code, not from Cypress. It was caused by an unhandled promise rejection.\n\n  > Cannot read properties of undefined (reading 'description')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.\n\nhttps://on.cypress.io/uncaught-exception-from-application",
+                "estack": "TypeError: The following error originated from your application code, not from Cypress. It was caused by an unhandled promise rejection.\n\n  > Cannot read properties of undefined (reading 'description')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.\n\nhttps://on.cypress.io/uncaught-exception-from-application\n    at <unknown> (http://localhost:5173/src/views/UserView.vue?t=1713131676187:161:55)\n    at renderList (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:4349:16)\n    at Proxy._sfc_render (http://localhost:5173/src/views/UserView.vue?t=1713131676187:118:15)\n    at renderComponentRoot (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:2343:17)\n    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7455:46)\n    at ReactiveEffect.run (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:430:19)\n    at instance.update (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7586:17)\n    at setupRenderEffect (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7596:5)\n    at mountComponent (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7364:7)\n    at processComponent (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7318:9)",
                 "diff": null
               },
-              "uuid": "c29b25f9-23a8-432e-b013-76726230cec6",
-              "parentUUID": "15fa93ba-8e4e-48c8-9880-31d7a3ba2e6f",
+              "uuid": "ca5ec3e5-5482-4565-bc14-749d31220ba5",
+              "parentUUID": "6de7aa81-18d1-4e67-a5ef-d54b86b8fedf",
               "isHook": false,
               "skipped": false
             }
           ],
           "suites": [],
           "passes": [
-            "ce287d19-10f5-4c5f-9c4b-54853ea7143b",
-            "c6d54636-5df4-4587-8151-98c4bf2562cb"
+            "6ce4605e-086a-4202-bd97-8a1a10a1736c",
+            "12a4b06d-b2d1-472f-9a06-452430bbeb98"
           ],
           "failures": [
-            "2afce7d8-fa1f-4cfa-968c-7355922455cd",
-            "f2a57e74-06a1-4e0c-b909-3688884ac07d",
-            "e80752cb-10fc-427a-90a2-6185a3b82d01",
-            "c29b25f9-23a8-432e-b013-76726230cec6"
+            "0ffd2d26-9305-42d4-b7eb-9cfb83d2534e",
+            "4214deb0-379c-4b5f-80af-f334777a81bf",
+            "4d3c4259-93ad-4f93-9121-6baaf3b3ae74",
+            "ca5ec3e5-5482-4565-bc14-749d31220ba5"
           ],
           "pending": [],
           "skipped": [],
-          "duration": 18464,
+          "duration": 7419,
           "root": false,
           "rootEmpty": false,
           "_timeout": 2000
         },
         {
-          "uuid": "90978653-3b45-43aa-82ff-7f10059949ed",
+          "uuid": "081f5469-c032-4989-88da-f826a928989e",
           "title": "Page /users/me",
           "fullFile": "",
           "file": "",
@@ -189,7 +189,7 @@
               "title": "me as alice",
               "fullTitle": "Page /users/me me as alice",
               "timedOut": null,
-              "duration": 4296,
+              "duration": 994,
               "state": "failed",
               "speed": null,
               "pass": false,
@@ -198,12 +198,12 @@
               "context": null,
               "code": "// Note : Vérifie que le contenu de la page est bien celui de l'utilisateur courant\ncy.visit(`http://localhost:5173/users/me`, {\n  onBeforeLoad: function (window) {\n    window.localStorage.setItem(\"token\", _tokens.aliceToken);\n  }\n});\ncy.get(\"[data-test-username]\").should(\"contain.text\", \"alice\");\ncy.get(\"[data-test-product]\").should(\"have.length\", 7);",
               "err": {
-                "message": "AssertionError: Timed out retrying after 4000ms: expected '<h1.text-center>' to contain text 'alice', but the text was ' Utilisateur charly Admin'",
-                "estack": "AssertionError: Timed out retrying after 4000ms: expected '<h1.text-center>' to contain text 'alice', but the text was ' Utilisateur charly Admin'\n    at Context.eval (webpack://frontend/./cypress/e2e/frontend/user.cy.js:144:35)\n    at runnable.fn (http://localhost:5173/__cypress/runner/cypress_runner.js:138654:19)\n    at callFn (http://localhost:5173/__cypress/runner/cypress_runner.js:157261:21)\n    at Runnable.run (http://localhost:5173/__cypress/runner/cypress_runner.js:157248:7)\n    at <unknown> (http://localhost:5173/__cypress/runner/cypress_runner.js:163172:30)\n    at PassThroughHandlerContext.finallyHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:4072:23)\n    at PassThroughHandlerContext.tryCatcher (http://localhost:5173/__cypress/runner/cypress_runner.js:1807:23)\n    at Promise._settlePromiseFromHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:1519:31)",
-                "diff": "- ' Utilisateur charly Admin'\n+ 'alice'\n"
+                "message": "TypeError: The following error originated from your application code, not from Cypress. It was caused by an unhandled promise rejection.\n\n  > Cannot read properties of undefined (reading 'description')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.\n\nhttps://on.cypress.io/uncaught-exception-from-application",
+                "estack": "TypeError: The following error originated from your application code, not from Cypress. It was caused by an unhandled promise rejection.\n\n  > Cannot read properties of undefined (reading 'description')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.\n\nhttps://on.cypress.io/uncaught-exception-from-application\n    at <unknown> (http://localhost:5173/src/views/UserView.vue?t=1713131676187:161:55)\n    at renderList (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:4349:16)\n    at Proxy._sfc_render (http://localhost:5173/src/views/UserView.vue?t=1713131676187:118:15)\n    at renderComponentRoot (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:2343:17)\n    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7455:46)\n    at ReactiveEffect.run (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:430:19)\n    at instance.update (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7586:17)\n    at setupRenderEffect (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7596:5)\n    at mountComponent (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7364:7)\n    at processComponent (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7318:9)",
+                "diff": null
               },
-              "uuid": "7b90296a-866e-46c0-8f69-5112699a772e",
-              "parentUUID": "90978653-3b45-43aa-82ff-7f10059949ed",
+              "uuid": "12ba27dd-abe3-4f4d-a383-8b97f3e1577d",
+              "parentUUID": "081f5469-c032-4989-88da-f826a928989e",
               "isHook": false,
               "skipped": false
             },
@@ -211,7 +211,7 @@
               "title": "me as bob",
               "fullTitle": "Page /users/me me as bob",
               "timedOut": null,
-              "duration": 4336,
+              "duration": 1259,
               "state": "failed",
               "speed": null,
               "pass": false,
@@ -220,12 +220,12 @@
               "context": null,
               "code": "// Note : Vérifie que le contenu de la page est bien celui de l'utilisateur courant\ncy.visit(`http://localhost:5173/users/me`, {\n  onBeforeLoad: function (window) {\n    window.localStorage.setItem(\"token\", _tokens.bobToken);\n  }\n});\ncy.get(\"[data-test-username]\").should(\"contain.text\", \"bob\");\ncy.get(\"[data-test-product]\").should(\"have.length\", 3);",
               "err": {
-                "message": "AssertionError: Timed out retrying after 4000ms: expected '<h1.text-center>' to contain text 'bob', but the text was ' Utilisateur charly Admin'",
-                "estack": "AssertionError: Timed out retrying after 4000ms: expected '<h1.text-center>' to contain text 'bob', but the text was ' Utilisateur charly Admin'\n    at Context.eval (webpack://frontend/./cypress/e2e/frontend/user.cy.js:157:35)\n    at runnable.fn (http://localhost:5173/__cypress/runner/cypress_runner.js:138654:19)\n    at callFn (http://localhost:5173/__cypress/runner/cypress_runner.js:157261:21)\n    at Runnable.run (http://localhost:5173/__cypress/runner/cypress_runner.js:157248:7)\n    at <unknown> (http://localhost:5173/__cypress/runner/cypress_runner.js:163172:30)\n    at PassThroughHandlerContext.finallyHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:4072:23)\n    at PassThroughHandlerContext.tryCatcher (http://localhost:5173/__cypress/runner/cypress_runner.js:1807:23)\n    at Promise._settlePromiseFromHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:1519:31)",
-                "diff": "- ' Utilisateur charly Admin'\n+ 'bob'\n"
+                "message": "TypeError: The following error originated from your application code, not from Cypress. It was caused by an unhandled promise rejection.\n\n  > Cannot read properties of undefined (reading 'description')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.\n\nhttps://on.cypress.io/uncaught-exception-from-application",
+                "estack": "TypeError: The following error originated from your application code, not from Cypress. It was caused by an unhandled promise rejection.\n\n  > Cannot read properties of undefined (reading 'description')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.\n\nhttps://on.cypress.io/uncaught-exception-from-application\n    at <unknown> (http://localhost:5173/src/views/UserView.vue?t=1713131676187:161:55)\n    at renderList (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:4349:16)\n    at Proxy._sfc_render (http://localhost:5173/src/views/UserView.vue?t=1713131676187:118:15)\n    at renderComponentRoot (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:2343:17)\n    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7455:46)\n    at ReactiveEffect.run (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:430:19)\n    at instance.update (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7586:17)\n    at setupRenderEffect (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7596:5)\n    at mountComponent (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7364:7)\n    at processComponent (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7318:9)",
+                "diff": null
               },
-              "uuid": "2a0765a0-3ce6-4e9c-ac7c-79feadaccb9e",
-              "parentUUID": "90978653-3b45-43aa-82ff-7f10059949ed",
+              "uuid": "ab1faaa6-832d-4c38-86e2-8fcd08140086",
+              "parentUUID": "081f5469-c032-4989-88da-f826a928989e",
               "isHook": false,
               "skipped": false
             },
@@ -233,7 +233,7 @@
               "title": "me as admin",
               "fullTitle": "Page /users/me me as admin",
               "timedOut": null,
-              "duration": 4362,
+              "duration": 1638,
               "state": "failed",
               "speed": null,
               "pass": false,
@@ -242,12 +242,12 @@
               "context": null,
               "code": "// Note : Vérifie que le contenu de la page est bien celui de l'utilisateur courant\ncy.visit(`http://localhost:5173/users/me`, {\n  onBeforeLoad: function (window) {\n    window.localStorage.setItem(\"token\", _tokens.adminToken);\n  }\n});\ncy.get(\"[data-test-username]\").should(\"contain.text\", \"admin\");",
               "err": {
-                "message": "AssertionError: Timed out retrying after 4000ms: expected '<h1.text-center>' to contain text 'admin', but the text was ' Utilisateur charly Admin'",
-                "estack": "AssertionError: Timed out retrying after 4000ms: expected '<h1.text-center>' to contain text 'admin', but the text was ' Utilisateur charly Admin'\n    at Context.eval (webpack://frontend/./cypress/e2e/frontend/user.cy.js:170:35)\n    at runnable.fn (http://localhost:5173/__cypress/runner/cypress_runner.js:138654:19)\n    at callFn (http://localhost:5173/__cypress/runner/cypress_runner.js:157261:21)\n    at Runnable.run (http://localhost:5173/__cypress/runner/cypress_runner.js:157248:7)\n    at <unknown> (http://localhost:5173/__cypress/runner/cypress_runner.js:163172:30)\n    at PassThroughHandlerContext.finallyHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:4072:23)\n    at PassThroughHandlerContext.tryCatcher (http://localhost:5173/__cypress/runner/cypress_runner.js:1807:23)\n    at Promise._settlePromiseFromHandler (http://localhost:5173/__cypress/runner/cypress_runner.js:1519:31)",
-                "diff": "- ' Utilisateur charly Admin'\n+ 'admin'\n"
+                "message": "TypeError: The following error originated from your application code, not from Cypress. It was caused by an unhandled promise rejection.\n\n  > Cannot read properties of undefined (reading 'description')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.\n\nhttps://on.cypress.io/uncaught-exception-from-application",
+                "estack": "TypeError: The following error originated from your application code, not from Cypress. It was caused by an unhandled promise rejection.\n\n  > Cannot read properties of undefined (reading 'description')\n\nWhen Cypress detects uncaught errors originating from your application it will automatically fail the current test.\n\nThis behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.\n\nhttps://on.cypress.io/uncaught-exception-from-application\n    at <unknown> (http://localhost:5173/src/views/UserView.vue?t=1713131676187:161:55)\n    at renderList (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:4349:16)\n    at Proxy._sfc_render (http://localhost:5173/src/views/UserView.vue?t=1713131676187:118:15)\n    at renderComponentRoot (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:2343:17)\n    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7455:46)\n    at ReactiveEffect.run (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:430:19)\n    at instance.update (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7586:17)\n    at setupRenderEffect (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7596:5)\n    at mountComponent (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7364:7)\n    at processComponent (http://localhost:5173/node_modules/.vite/deps/chunk-2FDUVFJ5.js?v=d17f162b:7318:9)",
+                "diff": null
               },
-              "uuid": "9cc72472-7ba7-432d-8e20-4961724d917b",
-              "parentUUID": "90978653-3b45-43aa-82ff-7f10059949ed",
+              "uuid": "a1fda16a-1bd0-4eba-a78b-483126f6654c",
+              "parentUUID": "081f5469-c032-4989-88da-f826a928989e",
               "isHook": false,
               "skipped": false
             }
@@ -255,13 +255,13 @@
           "suites": [],
           "passes": [],
           "failures": [
-            "7b90296a-866e-46c0-8f69-5112699a772e",
-            "2a0765a0-3ce6-4e9c-ac7c-79feadaccb9e",
-            "9cc72472-7ba7-432d-8e20-4961724d917b"
+            "12ba27dd-abe3-4f4d-a383-8b97f3e1577d",
+            "ab1faaa6-832d-4c38-86e2-8fcd08140086",
+            "a1fda16a-1bd0-4eba-a78b-483126f6654c"
           ],
           "pending": [],
           "skipped": [],
-          "duration": 12994,
+          "duration": 3891,
           "root": false,
           "rootEmpty": false,
           "_timeout": 2000

@@ -68,8 +68,6 @@ router.post('/api/auth/login', async (req: Request<Record<string, never>, {acces
       return res.status(401).json({ error: 'Invalid credentials' })
     }
 
-    console.log(user.password, password)
-
     // Vérifier le mot de passe de l'utilisateur
     if (user.password !== password) {
       return res.status(401).json({ error: 'Invalid credentials.' })
