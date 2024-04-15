@@ -1,30 +1,12 @@
 <script setup lang="ts">
 import { ref, computed, Ref } from "vue";
 import { API_URL } from "../config/config";
+import HomeProducts from "../model/model";
 
 const loading = ref(false);
 const error = ref(false);
 const errorStr = ref("");
-type Products ={
-  id: string;
-  name: string;
-  description: string;
-  category: string;
-  originalPrice: number;
-  lastPrice: number;
-  pictureUrl: string;
-  endDate: string;
-  seller: {
-    id: string;
-    username: string;
-  };
-  bids: {
-    id: string;
-    price: number;
-    date: string;
-  }[];
-}[];
-const products: Ref<Products> = ref([]);
+const products: Ref<HomeProducts> = ref([]);
 const filterInput = ref("");
 const sortInput = ref("name");
 const sortStr = ref("Trier par nom");

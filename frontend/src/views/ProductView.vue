@@ -3,6 +3,7 @@ import { ref, computed, Ref } from "vue";
 import { useRoute, useRouter, RouterLink, stringifyQuery } from "vue-router";
 import { useAuthStore } from "../store/auth";
 import { API_URL } from "@/config/config";
+import ViewProduct from "../model/model";
 
 const { isAuthenticated, isAdmin, userData, token } = useAuthStore();
 
@@ -26,30 +27,8 @@ const error = ref(false);
 const errorStr = ref("");
 const countdown = ref("...");
 const finished = ref(false);
-type Product = {
-  id: string,
-  name: string,
-  description: string,
-  category: string,
-  originalPrice: number,
-  pictureUrl: string,
-  endDate: string,
-  seller: {
-    id: string,
-    username: string
-  },
-  bids:
-  {
-    id: string,
-    price: number,
-    date: string,
-    bidder: {
-      id: string,
-      username: string
-    }
-  }[]
-};
-const product: Ref<Product | null> = ref();
+
+const product: Ref<ViewProduct | null> = ref();
 
 function startTimer() {
   let end = new Date(product.value.endDate);
@@ -102,6 +81,28 @@ async function removeProduct() {
 
   try {
     const res = await fetch(API_URL + 'api/products/' + productId, {
+      method: 'DELETE',
+      headers: {
+        "Authorization": "Barear " + token
+      }
+    });
+  } catch (e) {
+    errorStr.value = "Une erreur est survenue lors de la suppression du produit."
+    if (e instanceof Error){
+      errorStr.value += " " + e.message;
+    } 
+    error.value = true;
+  } finally {
+    loading.value = false;
+  }
+}
+
+async function removeBid(BidId: number) {
+  loading.value = true;
+  error.value = false;
+
+  try {
+    const res = await fetch(API_URL + 'api/bids/' + BidId, {
       method: 'DELETE',
       headers: {
         "Authorization": "Barear " + token
@@ -225,7 +226,10 @@ fetchProduct(productId.value);
               <td data-test-bid-price>{{ bid.price }} €</td>
               <td data-test-bid-date>{{ formatDate(bid.date) }}</td>
               <td>
-                <button class="btn btn-danger btn-sm" data-test-delete-bid>
+                <button class="btn btn-danger btn-sm" 
+                data-test-delete-bid
+                v-if="(isAuthenticated && userData?.id == bid.bidder.id) || isAdmin"
+                @click="removeBid(bid.id)">
                   Supprimer
                 </button>
               </td>
