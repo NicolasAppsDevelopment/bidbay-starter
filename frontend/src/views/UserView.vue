@@ -5,7 +5,7 @@ import { UserProducts } from "../model/model";
 import { API_URL } from "@/config/config";
 import { useAuthStore } from "../store/auth";
 
-const { isAuthenticated, userData, isAdmin } = useAuthStore();
+const { isAuthenticated, userData, isAdmin, userUuid, username } = useAuthStore();
 
 const router = useRouter();
 const route = useRoute();
@@ -30,7 +30,7 @@ async function fetchUser(id: string | string[]) {
 
   try {
     if (id == "me") {
-      
+      id = userUuid.value;
     }
 
     const res = await fetch(API_URL + 'api/users/' + id);
@@ -57,7 +57,7 @@ fetchUser(userId.value);
 <template>
   <div>
     <h1 class="text-center" data-test-username>
-      Utilisateur charly
+      Utilisateur {{ username }}
       <span v-if="isAdmin" class="badge rounded-pill bg-primary" data-test-admin>Admin</span>
     </h1>
     <div v-if="loading === true" class="text-center" data-test-loading>
